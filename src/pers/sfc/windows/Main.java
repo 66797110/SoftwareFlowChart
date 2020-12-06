@@ -4,8 +4,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import pers.sfc.windows.MyFrame;
-
 public class Main {
 	public static void main(String[] args)
 	   {

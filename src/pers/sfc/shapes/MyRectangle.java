@@ -3,6 +3,7 @@ package pers.sfc.shapes;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -23,7 +24,7 @@ public class MyRectangle extends Shape{
 	{
 		this(new MyPoint(),125,75);
 	}
-	
+
 	//鼠标是否在图形内
 	@Override
 	public boolean contains(Point2D p)
@@ -37,10 +38,9 @@ public class MyRectangle extends Shape{
 	}
 	//画矩形
 	@Override
-	public void draw(Graphics2D g)
+	public void drawEntity(Graphics2D g)
 	{
-		g.setColor(Color.BLACK);
-		g.setStroke(new BasicStroke(3));
+		g.setStroke(new BasicStroke(B));
 		g.draw(new Rectangle2D.Double(super.p.getX(), super.p.getY(), super.length, super.width));
 	}
 	//序列化
@@ -50,5 +50,10 @@ public class MyRectangle extends Shape{
 		String thisClass = " @MyRectangle";
 		String thisData = " @p = "+super.p.writeObject()+" @longth = "+super.length+" @width = "+super.width+" ";
 		return "</"+thisClass+thisData+"/>";
+	}
+
+	@Override
+	public void draw(Graphics2D g) {
+		state.draw(this, g);
 	}
 }

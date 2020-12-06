@@ -3,7 +3,9 @@ package pers.sfc.shapes;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
 public class MyRoundRectangle extends Shape{
@@ -26,14 +28,17 @@ public class MyRoundRectangle extends Shape{
 
 	@Override
 	public boolean contains(Point2D p) {
-		// TODO Auto-generated method stub
+		double x = p.getX();
+		double y = p.getY();
+		if(super.p.getX()<x && x<super.p.getX()+super.length && 
+				super.p.getY()<y && y<super.p.getY()+super.width)
+			return true;
 		return false;
 	}
 	//»­Ô²½Ç¾ØÐÎ
 	@Override
-	public void draw(Graphics2D g) {
-		g.setStroke(new BasicStroke(3));
-		g.setColor(Color.BLACK);
+	public void drawEntity(Graphics2D g) {
+		g.setStroke(new BasicStroke(B));
 		g.draw(new RoundRectangle2D.Double(super.p.getX(), super.p.getY(), super.length, super.width,40.0,40.0));
 	}
 
@@ -43,4 +48,8 @@ public class MyRoundRectangle extends Shape{
 		return null;
 	}
 
+	@Override
+	public void draw(Graphics2D g) {
+		state.draw(this, g);
+	}
 }
