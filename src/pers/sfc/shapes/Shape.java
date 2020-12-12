@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 
 import pers.sfc.execute.CodeExecute;
 import pers.sfc.execute.Execute;
+import pers.sfc.windows.MyDocument;
 
 abstract public class Shape {
 	private static final double A = 5;//Êó±ê¼àÌý¿í¶È
@@ -333,6 +334,47 @@ abstract public class Shape {
 	{
 		eJudge = false;
 		eArrow = null;
+	}
+	//¶Ï¿ª¼ýÍ·
+	public void deConnectArrow(Position pos)
+	{
+		if(pos.equals(Position.NORTH))
+			deleteNArrow();
+		else if(pos.equals(Position.WEST))
+			deleteWArrow();
+		else if(pos.equals(Position.SOUTH))
+			deleteSArrow();
+		else if(pos.equals(Position.EAST))
+			deleteEArrow();
+	}
+	//É¾³ý¼ýÍ·
+	public void deleteArrow(MyDocument myDocument)
+	{
+		MyArrow saveArrow;
+		if(nJudge)
+		{
+			saveArrow = nArrow;
+			nArrow.delete();
+			myDocument.remove(saveArrow);
+		}
+		if(wJudge)
+		{
+			saveArrow = wArrow;
+			wArrow.delete();
+			myDocument.remove(saveArrow);
+		}
+		if(sJudge)
+		{
+			saveArrow = sArrow;
+			sArrow.delete();
+			myDocument.remove(saveArrow);
+		}
+		if(eJudge)
+		{
+			saveArrow = eArrow;
+			eArrow.delete();
+			myDocument.remove(saveArrow);
+		}
 	}
 	//»­´úÂë
 	protected void drawCode(Graphics2D g)

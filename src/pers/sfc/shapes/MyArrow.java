@@ -139,4 +139,10 @@ public class MyArrow extends Shape{
 	{
 		return this.end;
 	}
+	//É¾³ý¸Ã¼ýÍ·
+	public void delete()
+	{
+		start.deConnectArrow(startP);
+		end.deConnectArrow(endP);
+	}
 }
