@@ -3,6 +3,7 @@ package pers.sfc.windows;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import pers.sfc.execute.CodeExecute;
 import pers.sfc.shapes.Shape;
 
 
@@ -35,6 +36,13 @@ public class MyDocument {
 		i = 0;
 		return null;
 	}
+	//第一个
+	public Shape getFirst()
+	{
+		if(!list.isEmpty())
+			return list.get(0);
+		return null;
+	}
 	//找点击的图形（内部）
 	public Shape findIn(Point2D p)
 	{
@@ -54,6 +62,14 @@ public class MyDocument {
 				return s;
 		}
 		return null;
+	}
+	//设置编译器
+	public void setExecute(CodeExecute execute)
+	{
+		for(Shape s : list)
+		{
+			s.setExecute(execute);
+		}
 	}
 	//将点击的图形移到链表头（实现层次）
 	public void move(Shape s)
@@ -86,5 +102,9 @@ public class MyDocument {
 	public void clean()
 	{
 		list.clear();
+	}
+	public void reset()
+	{
+		this.i = 0;
 	}
 }

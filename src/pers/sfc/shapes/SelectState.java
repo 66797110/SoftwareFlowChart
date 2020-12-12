@@ -20,4 +20,9 @@ public class SelectState implements State{
 		return s.onCorner(pIn);
 	}
 
+	@Override
+	public boolean contains(Shape s, Point2D pIn) {
+		return (s.containsN(pIn)||!s.clickedPoint(pIn).equals(Position.NONE));
+	}
+
 }

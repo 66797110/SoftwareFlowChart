@@ -3,12 +3,16 @@ package pers.sfc.windows;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
+import pers.sfc.execute.CodeExecute;
+import pers.sfc.execute.ShapeExecute;
 import pers.sfc.shapes.MyCircle;
 import pers.sfc.shapes.MyDiamond;
 import pers.sfc.shapes.MyParallelogram;
@@ -24,6 +28,9 @@ public class MyFrame extends JFrame{
 	private MyDocument myDocument;
 	//输入输出
 	private MyFileInOut myFileInOut;
+	//运行
+	private CodeExecute codeExecute;
+	private ShapeExecute shapeExecute;
 	//画板
 	private MyComponent myComponent;
 	//菜单
@@ -41,14 +48,23 @@ public class MyFrame extends JFrame{
 	private JMenuItem rect;
 	private JMenuItem diam;
 	private JMenuItem cir;
+	//代码菜单
+	private JMenu code;
+	private JMenuItem run;
+	private JMenuItem generate;
+	//操作
+	private JMenu operate;
+	private JMenuItem delete;
+
 	public MyFrame()
 	{
-		//初始化画板
-		myComponent = new MyComponent();
 		//初始化文件
 		myDocument = new MyDocument();
 		//初始化输入输出
 		myFileInOut = new MyFileInOut();
+		//初始化代码运行
+		codeExecute = new CodeExecute();
+		shapeExecute = new ShapeExecute();
 		//初始化菜单栏
 		bar = new JMenuBar();
 		//初始化文件菜单
@@ -64,6 +80,13 @@ public class MyFrame extends JFrame{
 		rect = new JMenuItem("处理框");
 		diam = new JMenuItem("判断框");
 		cir = new JMenuItem("连接点");
+		//初始化代码菜单
+		code = new JMenu("代码");
+		run = new JMenuItem("运行");
+		generate = new JMenuItem("生成");
+		//初始化操作菜单
+		operate = new JMenu("操作");
+		delete = new JMenuItem("删除");
 		//将文件菜单添加进菜单栏
 		file.add(create);
 		file.add(open);
@@ -77,41 +100,51 @@ public class MyFrame extends JFrame{
 		shape.add(diam);
 		shape.add(cir);
 		bar.add(shape);
+		//将代码菜单添加进菜单栏
+		code.add(run);
+		code.add(generate);
+		bar.add(code);
+		//将操作菜单添加进菜单栏
+		operate.add(delete);
+		bar.add(operate);
 		//将菜单栏和画板加入框架
 		setLayout(new BorderLayout());  
 		setJMenuBar(bar);
-		add(myComponent);  
-		setVisible(true);
+		//add(myComponent);  
+		//setVisible(true);
 		//文件菜单栏监听
 		create.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent event)
 			{
-				//myComponent = new MyComponent();
-				//add(myComponent);  
-				//setVisible(true);
+				if(myComponent!=null)
+					remove(myComponent);
+				myComponent = new MyComponent();
+				add(myComponent);  
+				setVisible(true);
 				myDocument.clean();
-				//repaint();
+				repaint();
 			}
 		});
-/*
+
 		open.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent event) 
 			{
 				try {
+					if(myComponent!=null)
+						remove(myComponent);
 					myComponent = new MyComponent();
-					add(myComponent, BorderLayout.SOUTH);  
-					add(buttons, BorderLayout.NORTH);
-					myDocument.newList(fileInOut.open());
-					myComponent.update(myDocument);
+					add(myComponent);
 					setVisible(true);
+					myDocument.newList(myFileInOut.open());
+					myComponent.update(myDocument);
 				} catch (ClassNotFoundException | IOException e) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, "alert", "alert", JOptionPane.ERROR_MESSAGE);
-					e.printStackTrace();
+					((Throwable) e).printStackTrace();
 				}
-				//repaint(); 
+				repaint(); 
 			}
 		});
 
@@ -120,7 +153,7 @@ public class MyFrame extends JFrame{
 			public void actionPerformed(ActionEvent event) 
 			{
 				try {
-					fileInOut.save(myDocument.getList());
+					myFileInOut.save(myDocument.getList());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, "alert", "alert", JOptionPane.ERROR_MESSAGE);
@@ -134,7 +167,7 @@ public class MyFrame extends JFrame{
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
-					fileInOut.saveAs(myDocument.getList());
+					myFileInOut.saveAs(myDocument.getList());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					//JOptionPane.showMessageDialog(null, "错误", "打开文件类型错误", JOptionPane.ERROR_MESSAGE);
@@ -142,14 +175,16 @@ public class MyFrame extends JFrame{
 				}
 			}
 		});
-		*/
+
 
 		//图形菜单栏监听
 		roundRect.addActionListener(new ActionListener() 
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				myDocument.update(new MyRoundRectangle());
+				var mrr = new MyRoundRectangle();
+				//mrr.setExecute(codeExecute);
+				myDocument.update(mrr);
 				myComponent.update(myDocument);
 				repaint();  
 			}  
@@ -158,7 +193,9 @@ public class MyFrame extends JFrame{
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				myDocument.update(new MyParallelogram());
+				var mp = new MyParallelogram();
+				//mp.setExecute(codeExecute);
+				myDocument.update(mp);
 				myComponent.update(myDocument);
 				repaint();  
 			}  
@@ -167,7 +204,9 @@ public class MyFrame extends JFrame{
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				myDocument.update(new MyRectangle());
+				var mr = new MyRectangle();
+				//mr.setExecute(codeExecute);
+				myDocument.update(mr);
 				myComponent.update(myDocument);
 				repaint();  
 			}  
@@ -176,7 +215,9 @@ public class MyFrame extends JFrame{
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				myDocument.update(new MyDiamond());
+				var md = new MyDiamond();
+				//md.setExecute(codeExecute);
+				myDocument.update(md);
 				myComponent.update(myDocument);
 				repaint();  
 			}  
@@ -185,10 +226,33 @@ public class MyFrame extends JFrame{
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				myDocument.update(new MyCircle());
+				var mc = new MyCircle();
+				//mc.setExecute(codeExecute);
+				myDocument.update(mc);
 				myComponent.update(myDocument);
 				repaint();  
 			}  
+		});
+
+		//代码菜单栏监听
+		run.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event) 
+			{
+				codeExecute = new CodeExecute();
+				myDocument.setExecute(codeExecute);
+				shapeExecute.setStartEnd(myComponent.getStart(), myComponent.getEnd());
+				shapeExecute.execute();
+			} 
+		});
+		//操作菜单栏监听
+		delete.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event) 
+			{
+				if(myComponent!=null)
+					myComponent.delete();
+			} 
 		});
 	}
 }

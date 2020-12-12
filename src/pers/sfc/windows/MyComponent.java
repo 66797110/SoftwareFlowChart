@@ -11,8 +11,12 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
 
+import pers.sfc.shapes.Func;
+import pers.sfc.shapes.MyArrow;
+import pers.sfc.shapes.MyPoint;
+import pers.sfc.shapes.Position;
 import pers.sfc.shapes.SelectState;
-import pers.sfc.shapes.SelectState;
+import pers.sfc.shapes.SelectedState;
 import pers.sfc.shapes.Shape;
 
 public class MyComponent extends JComponent{
@@ -27,7 +31,13 @@ public class MyComponent extends JComponent{
 	//图形
 	private Shape current;
 	private Shape last;
+	private Shape startShape;
+	private Shape endShape;
 	private double x,y;
+	//private MyPoint start;
+	//private MyPoint end;
+	private Position startP;//起点连接位置
+	private Position endP;//终点连接位置
 
 	//图形文件
 	private MyDocument myDocument = new MyDocument();
@@ -37,6 +47,11 @@ public class MyComponent extends JComponent{
 	{
 		this.current = null;
 		this.last = null;
+		startShape = null;
+		//this.start = null;
+		//this.end = null;
+		this.startP = null;
+		this.endP = null;
 		addMouseListener(new MouseHandler());
 		addMouseMotionListener(new MouseMotionHandler());
 	}
@@ -58,6 +73,41 @@ public class MyComponent extends JComponent{
 	public void update(MyDocument d)
 	{
 		this.myDocument = d;
+		repaint();
+	}
+	//获得开始图形
+	public Shape getStart()
+	{
+		for(Shape s ;(s = myDocument.getNext()) != null;)
+			if(s.getFunc().equals(Func.START))
+			{
+				myDocument.reset();
+				return s;
+			}
+		return null;
+	}
+	//获得结束图形
+	public Shape getEnd()
+	{
+		for(Shape s ;(s = myDocument.getNext()) != null;)
+			if(s.getFunc().equals(Func.END))
+			{
+				myDocument.reset();
+				return s;
+			}
+		return null;
+	}
+	//删除图形
+	@SuppressWarnings("unlikely-arg-type")
+	public void delete()
+	{
+		Shape s = myDocument.getFirst();
+		if(s != null && s.getState().getClass().getName().equals("pers.sfc.shapes.SelectState"))
+		{
+			System.out.println(1);
+			myDocument.remove(s);
+		}
+		repaint();
 	}
 	//鼠标操作
 	private class MouseHandler extends MouseAdapter
@@ -68,18 +118,67 @@ public class MyComponent extends JComponent{
 			if((current = myDocument.findIn(event.getPoint())) != null || (current = myDocument.findOn(event.getPoint())) != null) 
 			{
 				myDocument.move(current);
-				if(last != null)
+				if(last != null && !last.equals(current))
 					last.backState();
 				current.setState(new SelectState());
+				//if(current)
 			}
-			else
-				if(last != null)
-					last.backState();
+			else if(startShape != null)
+			{
+				startShape.strongBackState();
+				//start = end = null;
+				startShape = endShape = null;
+				startP = endP = null;
+			}
+			else if(last != null)
+				last.backState();
 			repaint();
 		}
 		public void mouseClicked(MouseEvent event)
 		{
-			
+			if(current != null&&!current.clickedPoint(event.getPoint()).equals(Position.NONE))
+			{
+				if(startP == null)
+				{
+					startP = current.clickedPoint(event.getPoint());
+					startShape = current;//保存起点图形对象
+					//start = current.getPoint(startP);
+					current.setState(new SelectedState(startP));
+				}
+				else 
+				{
+					if(!startShape.equals(current))
+					{
+						endP = current.clickedPoint(event.getPoint());
+						if(endP!=null) 
+						{
+							endShape = current;//终点图像
+							//end = current.getPoint(endP);
+							var Arrow = new MyArrow(startShape,endShape,startP,endP);
+							myDocument.update(Arrow);
+							startShape.strongBackState();
+							//start = end = null;
+							startShape = endShape = null;
+							startP = endP = null;
+						}
+					}
+				}
+			}
+
+			if(((current = myDocument.findIn(event.getPoint())) != null || (current = myDocument.findOn(event.getPoint())) != null)&&
+					(event.getClickCount() >= 2))
+				current.showDialog(MyComponent.this);
+			//current.setState(new CodeState())
+			/*
+			else if((myDocument.findIn(event.getPoint())) == null && (myDocument.findOn(event.getPoint())) == null)
+			{
+				if(startShape!=null)
+					startShape.strongBackState();
+				start = end = null;
+				startShape = null;
+			}
+			 */
+			repaint();
 		}
 	}
 	//鼠标监听
@@ -89,7 +188,12 @@ public class MyComponent extends JComponent{
 		public void mouseMoved(MouseEvent event)
 		{
 			Shape s;
-			if(myDocument.findIn(event.getPoint()) != null)
+			if(current!=null&&!current.clickedPoint(event.getPoint()).equals(Position.NONE))
+			{
+				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				state = -1;
+			}
+			else if(myDocument.findIn(event.getPoint()) != null)
 			{
 				setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 				state = 0;
@@ -109,7 +213,6 @@ public class MyComponent extends JComponent{
 				setCursor(Cursor.getDefaultCursor());
 				state = -1;
 			}
-			
 		}
 
 		public void mouseDragged(MouseEvent event) {
