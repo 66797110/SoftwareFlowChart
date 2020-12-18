@@ -4,13 +4,9 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
 
@@ -59,30 +55,28 @@ public class MyRoundRectangle extends Shape{
 	//画圆角矩形
 	@Override
 	public void drawEntity(Graphics2D g) {
+		if(color != null&&color.equals(Color.RED))
+			g.setColor(Color.RED);
+		else
+			g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(B));
 		g.draw(new RoundRectangle2D.Double(super.p.getX(), super.p.getY(), super.length, super.width,40.0,40.0));
 		drawCode(g);
 	}
 
 	@Override
-	public String writeObject() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void draw(Graphics2D g) {
 		state.draw(this, g);
-	}
-	//获得代码
-	public String getCode()
-	{
-		return code;
 	}
 	//代码运行
 	public boolean codeRun()
 	{
 		return execute.codeExecution(this);
+	}
+	//代码生成
+	@Override
+	public String codeGen(int num) {
+		return generate.codeGenerate(this,num);
 	}
 	//显示窗口
 	public boolean showDialog(Component parent)

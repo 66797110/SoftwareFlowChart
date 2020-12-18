@@ -12,7 +12,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import pers.sfc.execute.CodeExecute;
+import pers.sfc.execute.CodeGenerate;
 import pers.sfc.execute.ShapeExecute;
+import pers.sfc.execute.ShapeGenerate;
 import pers.sfc.shapes.MyCircle;
 import pers.sfc.shapes.MyDiamond;
 import pers.sfc.shapes.MyParallelogram;
@@ -31,6 +33,9 @@ public class MyFrame extends JFrame{
 	//运行
 	private CodeExecute codeExecute;
 	private ShapeExecute shapeExecute;
+	//生成
+	private CodeGenerate codeGenerate;
+	private ShapeGenerate shapeGenerate;
 	//画板
 	private MyComponent myComponent;
 	//菜单
@@ -65,6 +70,9 @@ public class MyFrame extends JFrame{
 		//初始化代码运行
 		codeExecute = new CodeExecute();
 		shapeExecute = new ShapeExecute();
+		//初始化代码生成
+		codeGenerate = new CodeGenerate();
+		shapeGenerate = new ShapeGenerate();
 		//初始化菜单栏
 		bar = new JMenuBar();
 		//初始化文件菜单
@@ -137,6 +145,7 @@ public class MyFrame extends JFrame{
 					myComponent = new MyComponent();
 					add(myComponent);
 					setVisible(true);
+					myFileInOut.reFileName();
 					myDocument.newList(myFileInOut.open());
 					myComponent.update(myDocument);
 				} catch (ClassNotFoundException | IOException e) {
@@ -153,7 +162,10 @@ public class MyFrame extends JFrame{
 			public void actionPerformed(ActionEvent event) 
 			{
 				try {
-					myFileInOut.save(myDocument.getList());
+					if(myComponent!=null) {
+						myComponent.resetColor();
+						myFileInOut.save(myDocument.getList());
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, "alert", "alert", JOptionPane.ERROR_MESSAGE);
@@ -167,6 +179,7 @@ public class MyFrame extends JFrame{
 			public void actionPerformed(ActionEvent event)
 			{
 				try {
+					myComponent.resetColor();
 					myFileInOut.saveAs(myDocument.getList());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -184,6 +197,7 @@ public class MyFrame extends JFrame{
 			{
 				var mrr = new MyRoundRectangle();
 				//mrr.setExecute(codeExecute);
+				myComponent.resetColor();
 				myDocument.update(mrr);
 				myComponent.update(myDocument);
 				repaint();  
@@ -195,6 +209,7 @@ public class MyFrame extends JFrame{
 			{
 				var mp = new MyParallelogram();
 				//mp.setExecute(codeExecute);
+				myComponent.resetColor();
 				myDocument.update(mp);
 				myComponent.update(myDocument);
 				repaint();  
@@ -206,6 +221,7 @@ public class MyFrame extends JFrame{
 			{
 				var mr = new MyRectangle();
 				//mr.setExecute(codeExecute);
+				myComponent.resetColor();
 				myDocument.update(mr);
 				myComponent.update(myDocument);
 				repaint();  
@@ -217,6 +233,7 @@ public class MyFrame extends JFrame{
 			{
 				var md = new MyDiamond();
 				//md.setExecute(codeExecute);
+				myComponent.resetColor();
 				myDocument.update(md);
 				myComponent.update(myDocument);
 				repaint();  
@@ -228,12 +245,12 @@ public class MyFrame extends JFrame{
 			{
 				var mc = new MyCircle();
 				//mc.setExecute(codeExecute);
+				myComponent.resetColor();
 				myDocument.update(mc);
 				myComponent.update(myDocument);
-				repaint();  
+				repaint(); 
 			}  
 		});
-
 		//代码菜单栏监听
 		run.addActionListener(new ActionListener()
 		{
@@ -242,14 +259,26 @@ public class MyFrame extends JFrame{
 				codeExecute = new CodeExecute();
 				myDocument.setExecute(codeExecute);
 				shapeExecute.setStartEnd(myComponent.getStart(), myComponent.getEnd());
-				shapeExecute.execute();
+				shapeExecute.execute(myComponent,myDocument);
 			} 
 		});
+		generate.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				codeGenerate = new CodeGenerate();
+				myDocument.setGenerate(codeGenerate);
+				shapeGenerate.setStartEnd(myComponent.getStart(), myComponent.getEnd());
+				shapeGenerate.write();
+			}
+		});
+
 		//操作菜单栏监听
 		delete.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent event) 
 			{
+				myComponent.resetColor();
 				if(myComponent!=null)
 					myComponent.delete();
 			} 

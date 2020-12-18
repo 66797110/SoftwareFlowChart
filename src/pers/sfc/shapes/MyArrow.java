@@ -1,6 +1,7 @@
 package pers.sfc.shapes;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
@@ -48,7 +49,7 @@ public class MyArrow extends Shape{
 		this(100,100,100,150);
 	}
 	//返回自己
-	
+
 	public void draw(Graphics2D g) {
 		/*
 		g.setStroke(new BasicStroke(2));
@@ -66,39 +67,373 @@ public class MyArrow extends Shape{
 	}
 	@Override
 	public boolean containsN(Point2D p) {
-		// TODO Auto-generated method stub
+		double x = p.getX();
+		double y = p.getY();
+		if(p1.getX() == p2.getX()&&p1.getX()-B<=x&&p1.getX()+B>=x&&
+				Math.min(p1.getY(), p2.getY())<y&&y<Math.max(p1.getY(), p2.getY()))
+			return true;
+		else if(p1.getY() == p2.getY()&&p1.getY()-B<=y&&p1.getY()+B>=y&&
+				Math.min(p1.getX(), p2.getX())<x&&x<Math.max(p1.getX(), p2.getX()))
+			return true;
+		else if(p5.getX() == p6.getX()&&p6.getX()-B<=x&&p6.getX()+B>=x&&
+				Math.min(p5.getY(), p6.getY())<y&&y<Math.max(p5.getY(), p6.getY()))
+			return true;
+		else if(p5.getY() == p6.getY()&&p6.getY()-B<=y&&p6.getY()+B>=y&&
+				Math.min(p5.getX(), p6.getX())<x&&x<Math.max(p5.getX(), p6.getX()))
+			return true;
+		else if(p3 == null&&p4 == null&&p2.getX() == p5.getX()&&p2.getX()-B<=x&&p2.getX()+B>=x&&
+				Math.min(p2.getY(), p5.getY())<y&&y<Math.max(p2.getY(), p5.getY()))
+			return true;
+		else if(p3 == null&&p4 == null&&p2.getY() == p5.getY()&&p2.getY()-B<=y&&p2.getY()+B>=y&&
+				Math.min(p2.getX(), p5.getX())<x&&x<Math.max(p2.getX(), p5.getX()))
+			return true;
+		else if(p3 != null&&p2.getX() == p3.getX()&&p2.getX()-B<=x&&p2.getX()+B>=x&&
+				Math.min(p2.getY(), p3.getY())<y&&y<Math.max(p2.getY(), p3.getY()))
+			return true;
+		else if(p3 != null&&p2.getY() == p3.getY()&&p2.getY()-B<=y&&p2.getY()+B>=y&&
+				Math.min(p2.getX(), p3.getX())<x&&x<Math.max(p2.getX(), p3.getX()))
+			return true;
+		else if(p3 != null&&p4 != null&&p3.getX() == p4.getX()&&p3.getX()-B<=x&&p3.getX()+B>=x&&
+				Math.min(p3.getY(), p4.getY())<y&&y<Math.max(p3.getY(), p4.getY()))
+			return true;
+		else if(p3 != null&&p4 != null&&p3.getY() == p4.getY()&&p3.getY()-B<=y&&p3.getY()+B>=y&&
+				Math.min(p3.getX(), p4.getX())<x&&x<Math.max(p3.getX(), p4.getX()))
+			return true;
+		else if(p4 != null&&p4.getX() == p5.getX()&&p4.getX()-B<=x&&p4.getX()+B>=x&&
+				Math.min(p4.getY(), p5.getY())<y&&y<Math.max(p4.getY(), p5.getY()))
+			return true;
+		else if(p4 != null&&p4.getY() == p5.getY()&&p4.getY()-B<=y&&p4.getY()+B>=y&&
+				Math.min(p4.getX(), p5.getX())<x&&x<Math.max(p4.getX(), p5.getX()))
+			return true;
 		return false;
 	}
 	@Override
 	public void drawEntity(Graphics2D g) {
+		if(color != null&&color.equals(Color.RED))
+			g.setColor(Color.RED);
+		else
+			g.setColor(Color.BLACK);
 		p1 = start.getPoint(startP);
 		p6 = end.getPoint(endP);
+		p2 = p3 = p4 = p5 = null;
+		if(startP.equals(Position.NORTH)&&endP.equals(Position.NORTH))
+		{
+			p2 = new MyPoint(p1.getX(),Math.min(p1.getY(),p6.getY())-20);
+			p5 = new MyPoint(p6.getX(),Math.min(p1.getY(),p6.getY())-20);
+		}
+		else if(startP.equals(Position.SOUTH)&&endP.equals(Position.SOUTH))
+		{
+			p2 = new MyPoint(p1.getX(),Math.max(p1.getY(),p6.getY())+20);
+			p5 = new MyPoint(p6.getX(),Math.max(p1.getY(),p6.getY())+20);
+		}
+		else if(startP.equals(Position.WEST)&&endP.equals(Position.WEST))
+		{
+			p2 = new MyPoint(Math.min(p1.getX(),p6.getX())-20,p1.getY());
+			p5 = new MyPoint(Math.min(p1.getX(),p6.getX())-20,p6.getY());
+		}
+		else if(startP.equals(Position.WEST)&&endP.equals(Position.WEST))
+		{
+			p2 = new MyPoint(Math.max(p1.getX(),p6.getX())+20,p1.getY());
+			p5 = new MyPoint(Math.max(p1.getX(),p6.getX())+20,p6.getY());
+		}
+		else if(startP.equals(Position.SOUTH)&&endP.equals(Position.NORTH))
+		{
+			if(p1.getY()<=p6.getY())
+			{
+				p2 = new MyPoint(p1.getX(),(p1.getY()+p6.getY())*0.5);
+				p5 = new MyPoint(p6.getX(),(p1.getY()+p6.getY())*0.5);
+			}
+			else if(p1.getY()>p6.getY())
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()+10);
+				p5 = new MyPoint(p6.getX(),p6.getY()-20);
+				p3 = new MyPoint((p1.getX()+p6.getX())*0.5,p2.getY());
+				p4 = new MyPoint((p1.getX()+p6.getX())*0.5,p5.getY());
+			}
+		}
+		else if(startP.equals(Position.NORTH)&&endP.equals(Position.SOUTH))
+		{
+			if(p1.getY()>=p6.getY())
+			{
+				p2 = new MyPoint(p1.getX(),(p1.getY()+p6.getY())*0.5);
+				p5 = new MyPoint(p6.getX(),(p1.getY()+p6.getY())*0.5);
+			}
+			else if(p1.getY()<p6.getY())
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()-10);
+				p5 = new MyPoint(p6.getX(),p6.getY()+20);
+				p3 = new MyPoint((p1.getX()+p6.getX())*0.5,p2.getY());
+				p4 = new MyPoint((p1.getX()+p6.getX())*0.5,p5.getY());
+			}
+		}
+		else if(startP.equals(Position.WEST)&&endP.equals(Position.EAST))
+		{
+			if(p1.getX()>=p6.getX())
+			{
+				p2 = new MyPoint((p1.getX()+p6.getX())*0.5,p1.getY());
+				p5 = new MyPoint((p1.getX()+p6.getX())*0.5,p6.getY());
+			}
+			else if(p1.getX()<p6.getX())
+			{
+				p2 = new MyPoint(p1.getX()-10,p1.getY());
+				p5 = new MyPoint(p6.getX()+20,p6.getY());
+				p3 = new MyPoint(p2.getX(),(p1.getY()+p6.getY())*0.5);
+				p4 = new MyPoint(p5.getX(),(p1.getY()+p6.getY())*0.5);
+			}
+		}
+		else if(startP.equals(Position.EAST)&&endP.equals(Position.WEST))
+		{
+			if(p1.getX()<=p6.getX())
+			{
+				p2 = new MyPoint((p1.getX()+p6.getX())*0.5,p1.getY());
+				p5 = new MyPoint((p1.getX()+p6.getX())*0.5,p6.getY());
+			}
+			else if(p1.getX()>p6.getX())
+			{
+				p2 = new MyPoint(p1.getX()+10,p1.getY());
+				p5 = new MyPoint(p6.getX()-20,p6.getY());
+				p3 = new MyPoint(p2.getX(),(p1.getY()+p6.getY())*0.5);
+				p4 = new MyPoint(p5.getX(),(p1.getY()+p6.getY())*0.5);
+			}
+		}
+		else if(startP.equals(Position.NORTH)&&endP.equals(Position.WEST))
+		{
+			if(p1.getX()<p6.getX()&&p1.getY()<p6.getY()+10) 
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()-10);
+				p5 = new MyPoint(p6.getX()-20,p6.getY());
+				p3 = new MyPoint(p5.getX(),p2.getY());
+				p4 = new MyPoint(p5.getX(),p2.getY());
+			}
+			else if(p1.getX()<p6.getX()&&p1.getY()>=p6.getY()+10)
+			{
+				p2 = new MyPoint(p1.getX(),p6.getY());
+				p5 = new MyPoint(p1.getX(),p6.getY());
+			}
+			else if(p1.getX()>=p6.getX()/*&&p1.getY()-10<=p6.getY()*/)
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()-20);
+				p5 = new MyPoint(p6.getX()-10,p6.getY());
+				p3 = new MyPoint(p5.getX(),p2.getY());
+				p4 = new MyPoint(p5.getX(),p2.getY());
+			}
+		}
+		else if(startP.equals(Position.WEST)&&endP.equals(Position.NORTH))
+		{
+			if(p1.getX()>p6.getX()&&p1.getY()>p6.getY()+10) 
+			{
+				p2 = new MyPoint(p1.getX()-10,p1.getY());
+				p5 = new MyPoint(p6.getX(),p6.getY()-20);
+				p3 = new MyPoint(p2.getX(),p5.getY());
+				p4 = new MyPoint(p5.getX(),p5.getY());
+			}
+			else if(p1.getX()>p6.getX()&&p1.getY()<=p6.getY()+10)
+			{
+				p2 = new MyPoint(p6.getX(),p1.getY());
+				p5 = new MyPoint(p6.getX(),p1.getY());
+			}
+			else if(p1.getX()<=p6.getX()/*&&p1.getY()-10<=p6.getY()*/)
+			{
+				p2 = new MyPoint(p1.getX()-10,p1.getY());
+				p5 = new MyPoint(p6.getX(),p6.getY()-20);
+				p3 = new MyPoint(p2.getX(),p5.getY());
+				p4 = new MyPoint(p2.getX(),p5.getY());
+			}
+		}
+		else if(startP.equals(Position.WEST)&&endP.equals(Position.SOUTH))
+		{
+			if(p1.getX()>p6.getX()&&p1.getY()<p6.getY()+10) 
+			{
+				p2 = new MyPoint(p1.getX()-10,p1.getY());
+				p5 = new MyPoint(p6.getX(),p6.getY()+20);
+				p3 = new MyPoint(p2.getX(),p5.getY());
+				p4 = new MyPoint(p2.getX(),p5.getY());
+			}
+			else if(p1.getX()>p6.getX()&&p1.getY()>=p6.getY()-10)
+			{
+				p2 = new MyPoint(p6.getX(),p1.getY());
+				p5 = new MyPoint(p6.getX(),p1.getY());
+			}
+			else if(p1.getX()<=p6.getX()/*&&p1.getY()-10<=p6.getY()*/)
+			{
+				p2 = new MyPoint(p1.getX()-10,p1.getY());
+				p5 = new MyPoint(p6.getX(),p6.getY()+20);
+				p3 = new MyPoint(p2.getX(),p5.getY());
+				p4 = new MyPoint(p2.getX(),p5.getY());
+			}
+		}
+		else if(startP.equals(Position.SOUTH)&&endP.equals(Position.WEST))
+		{
+			if(p1.getX()<p6.getX()&&p1.getY()>p6.getY()-10) 
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()+10);
+				p5 = new MyPoint(p6.getX()-20,p6.getY());
+				p3 = new MyPoint(p5.getX(),p2.getY());
+				p4 = new MyPoint(p5.getX(),p2.getY());
+			}
+			else if(p1.getX()<p6.getX()&&p1.getY()<=p6.getY()-10)
+			{
+				p2 = new MyPoint(p1.getX(),p6.getY());
+				p5 = new MyPoint(p1.getX(),p6.getY());
+			}
+			else if(p1.getX()>=p6.getX()/*&&p1.getY()-10<=p6.getY()*/)
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()+10);
+				p5 = new MyPoint(p6.getX()-20,p6.getY());
+				p3 = new MyPoint(p5.getX(),p2.getY());
+				p4 = new MyPoint(p5.getX(),p2.getY());
+			}
+		}
+		else if(startP.equals(Position.SOUTH)&&endP.equals(Position.EAST))
+		{
+			if(p1.getX()>p6.getX()&&p1.getY()>p6.getY()-10) 
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()+10);
+				p5 = new MyPoint(p6.getX()+20,p6.getY());
+				p3 = new MyPoint(p5.getX(),p2.getY());
+				p4 = new MyPoint(p5.getX(),p2.getY());
+			}
+			else if(p1.getX()>p6.getX()&&p1.getY()<=p6.getY()-10)
+			{
+				p2 = new MyPoint(p1.getX(),p6.getY());
+				p5 = new MyPoint(p1.getX(),p6.getY());
+			}
+			else if(p1.getX()<=p6.getX()/*&&p1.getY()-10<=p6.getY()*/)
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()+10);
+				p5 = new MyPoint(p6.getX()+20,p6.getY());
+				p3 = new MyPoint(p5.getX(),p2.getY());
+				p4 = new MyPoint(p5.getX(),p2.getY());
+			}
+		}
+		else if(startP.equals(Position.EAST)&&endP.equals(Position.SOUTH))
+		{
+			if(p1.getX()<p6.getX()&&p1.getY()<p6.getY()+10) 
+			{
+				p2 = new MyPoint(p1.getX()+10,p1.getY());
+				p5 = new MyPoint(p6.getX(),p6.getY()+20);
+				p3 = new MyPoint(p2.getX(),p5.getY());
+				p4 = new MyPoint(p2.getX(),p5.getY());
+			}
+			else if(p1.getX()<p6.getX()&&p1.getY()>=p6.getY()-10)
+			{
+				p2 = new MyPoint(p6.getX(),p1.getY());
+				p5 = new MyPoint(p6.getX(),p1.getY());
+			}
+			else if(p1.getX()>=p6.getX()/*&&p1.getY()-10<=p6.getY()*/)
+			{
+				p2 = new MyPoint(p1.getX()+10,p1.getY());
+				p5 = new MyPoint(p6.getX(),p6.getY()+20);
+				p3 = new MyPoint(p2.getX(),p5.getY());
+				p4 = new MyPoint(p2.getX(),p5.getY());
+			}
+		}
+		else if(startP.equals(Position.EAST)&&endP.equals(Position.NORTH))
+		{
+			if(p1.getX()<p6.getX()&&p1.getY()>p6.getY()+10) 
+			{
+				p2 = new MyPoint(p1.getX()+10,p1.getY());
+				p5 = new MyPoint(p6.getX(),p6.getY()-20);
+				p3 = new MyPoint(p2.getX(),p5.getY());
+				p4 = new MyPoint(p5.getX(),p5.getY());
+			}
+			else if(p1.getX()<p6.getX()&&p1.getY()<=p6.getY()+10)
+			{
+				p2 = new MyPoint(p6.getX(),p1.getY());
+				p5 = new MyPoint(p6.getX(),p1.getY());
+			}
+			else if(p1.getX()>=p6.getX()/*&&p1.getY()-10<=p6.getY()*/)
+			{
+				p2 = new MyPoint(p1.getX()+10,p1.getY());
+				p5 = new MyPoint(p6.getX(),p6.getY()-20);
+				p3 = new MyPoint(p2.getX(),p5.getY());
+				p4 = new MyPoint(p2.getX(),p5.getY());
+			}
+		}
+		else if(startP.equals(Position.NORTH)&&endP.equals(Position.EAST))
+		{
+			if(p1.getX()>p6.getX()&&p1.getY()<p6.getY()+10) 
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()-10);
+				p5 = new MyPoint(p6.getX()+20,p6.getY());
+				p3 = new MyPoint(p5.getX(),p2.getY());
+				p4 = new MyPoint(p5.getX(),p2.getY());
+			}
+			else if(p1.getX()>p6.getX()&&p1.getY()>=p6.getY()+10)
+			{
+				p2 = new MyPoint(p1.getX(),p6.getY());
+				p5 = new MyPoint(p1.getX(),p6.getY());
+			}
+			else if(p1.getX()<=p6.getX()/*&&p1.getY()-10<=p6.getY()*/)
+			{
+				p2 = new MyPoint(p1.getX(),p1.getY()-10);
+				p5 = new MyPoint(p6.getX()+20,p6.getY());
+				p3 = new MyPoint(p5.getX(),p2.getY());
+				p4 = new MyPoint(p5.getX(),p2.getY());
+			}
+		}
 		g.setStroke(new BasicStroke(2));
 		GeneralPath triangle = new GeneralPath();
 		if(endP.equals(Position.NORTH))
 		{
-			g.draw(new Line2D.Double(p1.getX(),p1.getY(),p6.getX(),p6.getY()-10));
+			if(p4 == null&&p3 == null)	
+				g.draw(new Line2D.Double(p2.getX(),p2.getY(),p5.getX(),p5.getY()));
+			else
+			{
+				g.draw(new Line2D.Double(p2.getX(),p2.getY(),p3.getX(),p3.getY()));
+				g.draw(new Line2D.Double(p3.getX(),p3.getY(),p4.getX(),p4.getY()));
+				g.draw(new Line2D.Double(p4.getX(),p4.getY(),p5.getX(),p5.getY()));
+			}
+			g.draw(new Line2D.Double(p1.getX(),p1.getY(),p2.getX(),p2.getY()));
+			g.draw(new Line2D.Double(p5.getX(),p5.getY(),p6.getX(),p6.getY()-10));
 			triangle.moveTo(p6.getX(),p6.getY());
 			triangle.lineTo(p6.getX()-L,p6.getY()-H);
 			triangle.lineTo(p6.getX()+L,p6.getY()-H);
 		}
 		else if(endP.equals(Position.WEST))
 		{
-			g.draw(new Line2D.Double(p1.getX(),p1.getY(),p6.getX()-10,p6.getY()));
+			if(p4 == null&&p3 == null)	
+				g.draw(new Line2D.Double(p2.getX(),p2.getY(),p5.getX(),p5.getY()));
+			else
+			{
+				g.draw(new Line2D.Double(p2.getX(),p2.getY(),p3.getX(),p3.getY()));
+				g.draw(new Line2D.Double(p3.getX(),p3.getY(),p4.getX(),p4.getY()));
+				g.draw(new Line2D.Double(p4.getX(),p4.getY(),p5.getX(),p5.getY()));
+			}
+			g.draw(new Line2D.Double(p1.getX(),p1.getY(),p2.getX(),p2.getY()));
+			g.draw(new Line2D.Double(p5.getX(),p5.getY(),p6.getX()-10,p6.getY()));
 			triangle.moveTo(p6.getX(),p6.getY());
 			triangle.lineTo(p6.getX()-H,p6.getY()+L);
 			triangle.lineTo(p6.getX()-H,p6.getY()-L);
 		}
 		else if(endP.equals(Position.SOUTH))
 		{
-			g.draw(new Line2D.Double(p1.getX(),p1.getY(),p6.getX(),p6.getY()+10));
+			if(p4 == null&&p3 == null)	
+				g.draw(new Line2D.Double(p2.getX(),p2.getY(),p5.getX(),p5.getY()));
+			else
+			{
+				g.draw(new Line2D.Double(p2.getX(),p2.getY(),p3.getX(),p3.getY()));
+				g.draw(new Line2D.Double(p3.getX(),p3.getY(),p4.getX(),p4.getY()));
+				g.draw(new Line2D.Double(p4.getX(),p4.getY(),p5.getX(),p5.getY()));
+			}
+			g.draw(new Line2D.Double(p1.getX(),p1.getY(),p2.getX(),p2.getY()));
+			g.draw(new Line2D.Double(p5.getX(),p5.getY(),p6.getX(),p6.getY()+10));
 			triangle.moveTo(p6.getX(),p6.getY());
 			triangle.lineTo(p6.getX()-L,p6.getY()+H);
 			triangle.lineTo(p6.getX()+L,p6.getY()+H);
 		}
 		else if(endP.equals(Position.EAST))
 		{
-			g.draw(new Line2D.Double(p1.getX(),p1.getY(),p6.getX()+10,p6.getY()));
+			if(p4 == null&&p3 == null)	
+				g.draw(new Line2D.Double(p2.getX(),p2.getY(),p5.getX(),p5.getY()));
+			else
+			{
+				g.draw(new Line2D.Double(p2.getX(),p2.getY(),p3.getX(),p3.getY()));
+				g.draw(new Line2D.Double(p3.getX(),p3.getY(),p4.getX(),p4.getY()));
+				g.draw(new Line2D.Double(p4.getX(),p4.getY(),p5.getX(),p5.getY()));
+			}
+			g.draw(new Line2D.Double(p1.getX(),p1.getY(),p2.getX(),p2.getY()));
+			g.draw(new Line2D.Double(p5.getX(),p5.getY(),p6.getX()+10,p6.getY()));
 			triangle.moveTo(p6.getX(),p6.getY());
 			triangle.lineTo(p6.getX()+H,p6.getY()+L);
 			triangle.lineTo(p6.getX()+H,p6.getY()-L);
@@ -106,11 +441,6 @@ public class MyArrow extends Shape{
 		triangle.closePath();
 		//实心箭头
 		g.fill(triangle);
-	}
-	@Override
-	public String writeObject() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	public void putStart(Shape s,Position p)
 	{
@@ -126,13 +456,17 @@ public class MyArrow extends Shape{
 	public void onSize(double newX,double newY,double oldX,double oldY,int state) {}
 	@Override
 	public boolean contains(Point2D pIn) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.state.contains(this, pIn);
 	}
 	@Override
 	public boolean showDialog(Component parent) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	//代码生成
+	@Override
+	public String codeGen(int num) {
+		return null;
 	}
 	//获得终点
 	public Shape getEnd()

@@ -22,7 +22,11 @@ public class MyFileInOut {
 		FileName = null;
 		oios = new MyIOStream();
 	}
-	
+	//重置FileName
+	public void reFileName()
+	{
+		FileName = null;
+	}
 	//打开文件
 	public ArrayList<?> open() throws ClassNotFoundException, IOException
 	{

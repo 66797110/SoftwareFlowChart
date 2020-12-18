@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import pers.sfc.execute.CodeExecute;
+import pers.sfc.execute.CodeGenerate;
 import pers.sfc.shapes.Shape;
 
 
@@ -27,6 +28,12 @@ public class MyDocument {
 	public void update(Shape s)
 	{
 		list.add(0,s);
+	}
+	//重置
+	public void replace(Shape s)
+	{
+		remove(s);
+		update(s);
 	}
 	//下一个
 	public Shape getNext()
@@ -69,6 +76,14 @@ public class MyDocument {
 		for(Shape s : list)
 		{
 			s.setExecute(execute);
+		}
+	}
+	//设置生成器
+	public void setGenerate(CodeGenerate generate)
+	{
+		for(Shape s : list)
+		{
+			s.setGenerate(generate);
 		}
 	}
 	//将点击的图形移到链表头（实现层次）

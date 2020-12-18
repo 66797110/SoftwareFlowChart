@@ -6,12 +6,10 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
@@ -21,7 +19,7 @@ import pers.sfc.shapes.MyParallelogram;
 import pers.sfc.shapes.MyRectangle;
 import pers.sfc.shapes.MyRoundRectangle;
 
-public class CodeExecute implements Execute{
+public class CodeExecute{
 	private String code;
 	private String num;
 	private ArrayList<Variable> list = new ArrayList<Variable>();
@@ -30,98 +28,104 @@ public class CodeExecute implements Execute{
 		code = roundrectangle.getCode();
 		if(code.equals("start"))
 			return true;
-		else
-			return false;
+		return false;
 	}
 
 	public boolean codeExecution(MyRectangle rectangle)
 	{
 		Variable num = null;
 		Variable opNum = null;
-		String op = null;
 		String type = null;
 		String name = null;
 		code = rectangle.getCode();
-		char[] ch = code.toCharArray();
-		String[] arr = new String[4];
+		String [] arr = code.split("\n");
+		//char[] ch = code.toCharArray();
+		char[] ch;
 		StringBuffer sbf = new StringBuffer();
 		StringBuffer vbf = new StringBuffer();
 		int i;
-		for(i = 0;i<ch.length&&ch[i]==' ';i++);
-		for(;(('a'<=ch[i]&&ch[i]<='z')||('A'<=ch[i]&&ch[i]<='Z')||ch[i]=='_')&&i<ch.length;i++)
-			vbf.append(ch[i]);
-		if(vbf.toString().equals("int")||vbf.toString().equals("float")||vbf.toString().equals("double")||vbf.toString().equals("boolean")||vbf.toString().equals("char"))
+		for(int k = 0;k<arr.length;k++)
 		{
-			type = vbf.toString();
 			vbf.delete(0, vbf.length());
-			for(;i<ch.length&&ch[i]==' ';i++);
+			ch = arr[k].toCharArray();
+			for(i = 0;i<ch.length&&ch[i]==' ';i++);
 			for(;(('a'<=ch[i]&&ch[i]<='z')||('A'<=ch[i]&&ch[i]<='Z')||ch[i]=='_')&&i<ch.length;i++)
 				vbf.append(ch[i]);
-			for(int j = 0;j<list.size();j++)
-				if(list.get(j).getName().equals(vbf.toString()))
-					return false;
-			name = vbf.toString();
-			var var = new Variable(name,type);
-			for(;i<ch.length&&ch[i]==' ';i++);
-			if(ch[i]==';')
-				list.add(var);
-			else if(ch[i]=='=')
+			if(vbf.toString().equals("int")||vbf.toString().equals("float")||vbf.toString().equals("double")||vbf.toString().equals("boolean")||vbf.toString().equals("char"))
 			{
+				type = vbf.toString();
 				vbf.delete(0, vbf.length());
-				for(i++;i<ch.length&&ch[i]==' ';i++);
-				for(;'0'<=ch[i]&&ch[i]<='9'&&i<ch.length;i++)
+				for(;i<ch.length&&ch[i]==' ';i++);
+				for(;(i<ch.length&&('a'<=ch[i]&&ch[i]<='z')||('A'<=ch[i]&&ch[i]<='Z')||ch[i]=='_');i++)
 					vbf.append(ch[i]);
-				var.setVar(Double.parseDouble(vbf.toString()));
-				list.add(var);
-
-			}
-			else
-				return false;
-		}
-		else
-		{
-			for(int j = 0;j<list.size();j++)
-				if(list.get(j).getName().equals(vbf.toString()))
+				for(int j = 0;j<list.size();j++)
+					if(list.get(j).getName().equals(vbf.toString()))
+						return false;
+				name = vbf.toString();
+				var var = new Variable(name,type);
+				for(;i<ch.length&&ch[i]==' ';i++);
+				if(ch[i]==';')
+					list.add(var);
+				else if(ch[i]=='=')
 				{
-					num = list.get(j);
-					break;
-				}
-			vbf.delete(0, vbf.length());
-			for(;i<ch.length&&ch[i]==' ';i++);
-			if(ch[i]=='=') 
-			{
-				sbf.delete(0, sbf.length());
-				for(i++;i<ch.length;i++)
-				{
-					if(i<ch.length&&ch[i]==' ')continue;
-					for(;i<ch.length&&(('a'<=ch[i]&&ch[i]<='z')||('A'<=ch[i]&&ch[i]<='Z')||ch[i]=='_');i++)
+					vbf.delete(0, vbf.length());
+					for(i++;i<ch.length&&ch[i]==' ';i++);
+					for(;'0'<=ch[i]&&ch[i]<='9'&&i<ch.length;i++)
 						vbf.append(ch[i]);
-					if(vbf.length() != 0)
-					{
-						opNum = null;
-						for(int j = 0;j<list.size();j++)
-							if(list.get(j).getName().equals(vbf.toString()))
-							{
-								opNum = list.get(j);
-								break;
-							}
-						vbf.delete(0, vbf.length());
-						sbf.append(""+opNum.getVar());
-					}
-					if(i<ch.length&&ch[i]==' ')continue;
-					for(;i<ch.length&&(('0'<=ch[i]&&ch[i]<='9')||ch[i]=='+'||ch[i]=='-'||ch[i]=='*'||ch[i]=='/'||ch[i]=='('||ch[i]==')');i++)
-						sbf.append(ch[i]);
-					i--;
+					var.setVar(Double.parseDouble(vbf.toString()));
+					list.add(var);
 				}
-
+				else
+					return false;
 			}
 			else
-				return false;
+			{
+				for(int j = 0;j<list.size();j++)
+					if(list.get(j).getName().equals(vbf.toString()))
+					{
+						num = list.get(j);
+						break;
+					}
+				vbf.delete(0, vbf.length());
+				for(;i<ch.length&&ch[i]==' ';i++);
+				if(ch[i]=='=') 
+				{
+					sbf.delete(0, sbf.length());
+					for(i++;i<ch.length;i++)
+					{
+						if(i<ch.length&&ch[i]==' ')continue;
+						for(;i<ch.length&&(('a'<=ch[i]&&ch[i]<='z')||('A'<=ch[i]&&ch[i]<='Z')||ch[i]=='_');i++)
+							vbf.append(ch[i]);
+						if(vbf.length() != 0)
+						{
+							opNum = null;
+							for(int j = 0;j<list.size();j++)
+								if(list.get(j).getName().equals(vbf.toString()))
+								{
+									opNum = list.get(j);
+									break;
+								}
+							vbf.delete(0, vbf.length());
+							if(opNum.getVar()<0)
+								sbf.append("("+opNum.getVar()+")");
+							else
+								sbf.append(""+opNum.getVar());
+						}
+						if(i<ch.length&&ch[i]==' ')continue;
+						for(;i<ch.length&&(('0'<=ch[i]&&ch[i]<='9')||ch[i]=='+'||ch[i]=='-'||ch[i]=='*'||ch[i]=='/'||ch[i]=='('||ch[i]==')');i++)
+							sbf.append(ch[i]);
+						if(i<ch.length&&ch[i]==';')break;
+						i--;
+					}
+					sbf.append("+0=");
+					Calculator cal = new Calculator();
+					double value = cal.calculator(sbf.toString());
+					num.setVar(value);
+				}
+				else
+					return false;
+			}
 		}
-
-		Calculator cal = new Calculator();
-		double value = cal.calculator(sbf.toString());
-		num.setVar(value);
 		return true;
 	}
 
@@ -160,101 +164,102 @@ public class CodeExecute implements Execute{
 
 	public int codeExecution(MyDiamond diamond)
 	{
-		Variable num1 = null;
-		Variable num2 = null;
+		Double num1 = Double.NaN;
+		Double num2 = Double.NaN;
 		String op = null;
 		code = diamond.getCode();
 		char[] ch = code.toCharArray();
-		String[] arr = new String[4];
 		StringBuffer sbf = new StringBuffer();
-		int j = 0;
-		boolean full = true;//判断是否是带感叹号
-		//获得比大小的变量名与比大小符号
-		if((ch[0]>=65&&ch[0]<=90)||(ch[0]>=97&&ch[0]<=122))
+		if(ch[0] == '!')
 		{
-			full = true;
-			boolean isVar = true;
-			for(int i = 0;i < ch.length;i++)
-			{
-				if(ch[i]==' ')
-					continue;
-				if(((ch[i]>=65&&ch[i]<=90)||(ch[i]>=97&&ch[i]<=122)||ch[i]=='_')&&isVar) {
-					sbf.append(ch[i]);
-					continue;
-				}
-				if(isVar) {
-					arr[j++] = sbf.toString();
-					sbf.delete(0, sbf.length());
-					isVar= false;
-				}
-				if((ch[i]=='<'||ch[i]=='='||ch[i]=='>'||ch[i]=='!')&&!isVar) {
-					sbf.append(ch[i]);
-					continue;
-				}
-				if(!isVar) {
-					arr[j++] = sbf.toString();
-					sbf.delete(0, sbf.length());
-					isVar = true;
-				}
-			}
+			op = "!";
+			int i = 2;
+			for(;i<ch.length&&ch[i]==' ';i++);
+			for(;(i<ch.length&&('a'<=ch[i]&&ch[i]<='z')||('A'<=ch[i]&&ch[i]<='Z')||ch[i]=='_');i++)
+				sbf.append(ch[i]);
+			if(sbf.length()!=0)
+				for(int j = 0;j<list.size();j++)
+					if(list.get(j).getName().equals(sbf.toString()))
+					{
+						Variable var = list.get(j);
+						num1 = var.getVar();
+						break;
+					}
 		}
-		else// if(ch[0]=='!')
+		else if(('a'<=ch[0]&&ch[0]<='z')||('A'<=ch[0]&&ch[0]<='Z')||ch[0]=='_'||('0'<=ch[0]&&ch[0]<='9')||ch[0]=='-')
 		{
-			full = false;
-			sbf.append(ch[0]);
-			arr[j++] = sbf.toString();
-			sbf.delete(0, sbf.length());
-			for(int i = 1;i < ch.length;i++)
+			for(int i=0;i<ch.length;i++)
 			{
-				if(ch[i]==' ')
-					continue;
-				if((ch[i]>=65&&ch[i]<=90)||(ch[i]>=97&&ch[i]<=122)||ch[i]=='_') {
+				if(i<ch.length&&ch[i]==' ')continue;
+				for(;i<ch.length&&(('a'<=ch[i]&&ch[i]<='z')||('A'<=ch[i]&&ch[i]<='Z')||ch[i]=='_');i++)
 					sbf.append(ch[i]);
-					continue;
+				if(sbf.length() != 0)
+				{
+					for(int j = 0;j<list.size();j++)
+						if(list.get(j).getName().equals(sbf.toString()))
+						{
+							Variable var = list.get(j);
+							if(num1.equals(Double.NaN))
+								num1 = var.getVar();
+							else if(num2.equals(Double.NaN))
+								num2 = var.getVar();
+							else
+								return -1;
+							break;
+						}
+					sbf.delete(0, sbf.length());
 				}
-				arr[j++] = sbf.toString();
+				if(i<ch.length&&ch[i]==' ')continue;
+				for(;i<ch.length&&(ch[i]=='<'||ch[i]=='>'||ch[i]=='=');i++)
+					sbf.append(ch[i]);
+				if(sbf.length() != 0)
+					op = sbf.toString();
 				sbf.delete(0, sbf.length());
+				if(i<ch.length&&ch[i]==' ')continue;
+				for(;i<ch.length&&(('0'<=ch[i]&&ch[i]<='9')||ch[i]=='-');i++)
+					sbf.append(ch[i]);
+				if(sbf.length() != 0)
+				{
+					if(num1.equals(Double.NaN))
+						num1 = Double.parseDouble(sbf.toString());
+					else if(num2.equals(Double.NaN))
+						num2 = Double.parseDouble(sbf.toString());
+					else
+						return -1;
+					sbf.delete(0, sbf.length());
+				}
+				i--;
 			}
 		}
-		//if(full)
-		//{
-		for(int i = 0;i<list.size();i++)
-			if(list.get(i).getName().equals(arr[0]))
+		else
+			return -1;
+		//运算
+		if(op!=null)
+			switch(op)
 			{
-				num1 = list.get(i);
-				break;
+			case("!"):
+				if(num1 == 0)return 1;else return 0;
+			case("<"):
+				if(num1<num2)return 1;else return 0;
+			case("<="):
+				if(num1<=num2)return 1;else return 0;
+			case(">"):
+				if(num1>num2)return 1;else return 0;
+			case(">="):
+				if(num1>=num2)return 1;else return 0;
+			case("=="):
+				if(num1==num2)return 1;else return 0;
+			case("!="):
+				if(num1!=num2)return 1;else return 0;
 			}
-		op = arr[1];
-		for(int i = 0;i < list.size();i++)
-			if(list.get(i).getName().equals(arr[2]))
-			{
-				num2 = list.get(i);
-				break;
-			}
-		//}
-		if(num1==null||num2==null)
-			return 0;
-		switch(op)
-		{
-		case("<"):
-			if(num1.getVar()<num2.getVar())return 1;else return 0;
-		case("<="):
-			if(num1.getVar()<=num2.getVar())return 1;else return 0;
-		case(">"):
-			if(num1.getVar()>num2.getVar())return 1;else return 0;
-		case(">="):
-			if(num1.getVar()>=num2.getVar())return 1;else return 0;
-		case("=="):
-			if(num1.getVar()==num2.getVar())return 1;else return 0;
-		case("!="):
-			if(num1.getVar()!=num2.getVar())return 1;else return 0;
-		}
+		else
+			if(num1 == 1)return 1;else return 0;
 		return -1;
+
 	}
 
 	public boolean codeExecution(MyCircle circle)
 	{
-
 		return true;
 	}
 

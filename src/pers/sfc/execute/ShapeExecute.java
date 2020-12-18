@@ -1,7 +1,11 @@
 package pers.sfc.execute;
 
-import pers.sfc.shapes.MyArrow;
+import java.awt.Color;
+import java.util.concurrent.TimeUnit;
+
 import pers.sfc.shapes.Shape;
+import pers.sfc.windows.MyComponent;
+import pers.sfc.windows.MyDocument;
 
 public class ShapeExecute {
 	private Shape start;
@@ -21,14 +25,26 @@ public class ShapeExecute {
 		this.start = start;
 		this.end = end;
 	}
-	public void execute()
+	public void execute(MyComponent myComponent,MyDocument myDocument)
 	{
-		for(current = start;!current.equals(end);current = current.getNext())
+		for(current = start;current!=null;current = current.getNext())
 		{
-			if(!current.codeRun())
+			current.setColorOn(Color.RED);
+			myComponent.repaint();
+			if(current!=null&&current.getClass().getName().equals("pers.sfc.shapes.MyCircle"))
+			{
+				for(Shape s;(s = myDocument.getNext())!=null;)
+					if(current.getCode().equals(s.getCode()))
+					{
+						s.setColorOn(Color.RED);
+						myComponent.repaint();
+						current = s;
+						myDocument.reset();
+						break;
+					}
+			}
+			else if(current!=null&&!current.codeRun())
 				return;
 		}
-		if(!current.codeRun())
-			return;
 	}
 }

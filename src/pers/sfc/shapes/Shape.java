@@ -1,35 +1,26 @@
 package pers.sfc.shapes;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Frame;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import pers.sfc.execute.CodeExecute;
-import pers.sfc.execute.Execute;
+import pers.sfc.execute.CodeGenerate;
 import pers.sfc.windows.MyDocument;
 
 abstract public class Shape {
 	private static final double A = 5;//鼠标监听宽度
-	protected static final float B = 2;//画笔宽度
+	protected static final float B = 2;//画笔宽度/箭头鼠标监听宽度
 	protected static final float C = 2;//面积容错
 	protected MyPoint p; //左上角定位
 	protected double length; //长
@@ -38,7 +29,8 @@ abstract public class Shape {
 	protected State lstate;
 	protected String code = null;
 	protected JTextField textField;
-	protected CodeExecute execute;
+	protected CodeExecute execute;//代码运行
+	protected CodeGenerate generate;//代码生成
 	protected MyArrow nArrow,wArrow,sArrow,eArrow;//东西南北点持有箭头
 	protected boolean nFunc,wFunc,sFunc,eFunc;//各方向箭头的作用，false：进；true：出
 	protected boolean nJudge = false,
@@ -49,6 +41,8 @@ abstract public class Shape {
 			asEnd = 0;//作为开始和结束图形的数量
 	//protected MyArrow outArrow;
 	protected Func func;
+	//颜色设置
+	protected Color color = Color.BLACK;
 	//鼠标是否在图形内普通情况
 	abstract public boolean containsN(Point2D p);
 	//鼠标是否在图形内
@@ -61,27 +55,30 @@ abstract public class Shape {
 	abstract public boolean showDialog(Component parent);
 	//代码运行
 	public boolean codeRun() {return true;}
+	//代码生成
+	abstract public String codeGen(int num);
 	//设置内部颜色
 	//abstract public void setColorIn();
 	//设置边框颜色
-	//abstract public void setColorOn();
-	//序列化
-	abstract public String writeObject();
+	public void setColorOn(Color color)
+	{
+		this.color = color;
+	}
 	//画连接点
 	public void connectPoint(Graphics2D g)
 	{
 		//画四边小圆形
 		g.setStroke(new BasicStroke(1));
-		if(!nJudge)g.draw(new Ellipse2D.Double(this.p.getX()+this.length*0.5-5, this.p.getY()-5, 10, 10));
-		if(!wJudge)g.draw(new Ellipse2D.Double(this.p.getX()-5, this.p.getY()+this.width*0.5-5, 10, 10));
-		if(!sJudge)g.draw(new Ellipse2D.Double(this.p.getX()+this.length*0.5-5, this.p.getY()+this.width-5, 10, 10));
-		if(!eJudge)g.draw(new Ellipse2D.Double(this.p.getX()+this.length-5, this.p.getY()+this.width*0.5-5, 10, 10));
+		if(!nJudge||(!nFunc&&nJudge))g.draw(new Ellipse2D.Double(this.p.getX()+this.length*0.5-5, this.p.getY()-5, 10, 10));
+		if(!wJudge||(!wFunc&&wJudge))g.draw(new Ellipse2D.Double(this.p.getX()-5, this.p.getY()+this.width*0.5-5, 10, 10));
+		if(!sJudge||(!sFunc&&sJudge))g.draw(new Ellipse2D.Double(this.p.getX()+this.length*0.5-5, this.p.getY()+this.width-5, 10, 10));
+		if(!eJudge||(!eFunc&&eJudge))g.draw(new Ellipse2D.Double(this.p.getX()+this.length-5, this.p.getY()+this.width*0.5-5, 10, 10));
 		//小圆形填充白色
 		g.setColor(Color.WHITE);
-		if(!nJudge)g.fill(new Ellipse2D.Double(this.p.getX()+this.length*0.5-4.5, this.p.getY()-4.5, 9, 9));
-		if(!wJudge)g.fill(new Ellipse2D.Double(this.p.getX()-4.5, this.p.getY()+this.width*0.5-4.5, 9, 9));
-		if(!sJudge)g.fill(new Ellipse2D.Double(this.p.getX()+this.length*0.5-4.5, this.p.getY()+this.width-4.5, 9, 9));
-		if(!eJudge)g.fill(new Ellipse2D.Double(this.p.getX()+this.length-4.5, this.p.getY()+this.width*0.5-4.5, 9, 9));
+		if(!nJudge||(!nFunc&&nJudge))g.fill(new Ellipse2D.Double(this.p.getX()+this.length*0.5-4.5, this.p.getY()-4.5, 9, 9));
+		if(!wJudge||(!wFunc&&wJudge))g.fill(new Ellipse2D.Double(this.p.getX()-4.5, this.p.getY()+this.width*0.5-4.5, 9, 9));
+		if(!sJudge||(!sFunc&&sJudge))g.fill(new Ellipse2D.Double(this.p.getX()+this.length*0.5-4.5, this.p.getY()+this.width-4.5, 9, 9));
+		if(!eJudge||(!eFunc&&eJudge))g.fill(new Ellipse2D.Double(this.p.getX()+this.length-4.5, this.p.getY()+this.width*0.5-4.5, 9, 9));
 	}
 	//获得坐标点
 	public MyPoint getPoint(Position p)
@@ -105,13 +102,13 @@ abstract public class Shape {
 		double x=pIn.getX();
 		double y=pIn.getY();
 		if(Math.sqrt(Math.pow(this.p.getX()+this.length*0.5-x, 2)+Math.pow(this.p.getY()-y, 2))<=6)//上方圆圈
-			if(!nJudge)return Position.NORTH;else return Position.NONE;
+			if(!nJudge||(!nFunc&&nJudge))return Position.NORTH;else return Position.NONE;
 		else if(Math.sqrt(Math.pow(this.p.getX()-x, 2)+Math.pow(this.p.getY()+this.width*0.5-y, 2))<=6)//左方圆圈
-			if(!wJudge)return Position.WEST;else return Position.NONE;
+			if(!wJudge||(!wFunc&&wJudge))return Position.WEST;else return Position.NONE;
 		else if(Math.sqrt(Math.pow(this.p.getX()+this.length*0.5-x, 2)+Math.pow(this.p.getY()+this.width-y, 2))<=6)//下方圆圈
-			if(!sJudge)return Position.SOUTH;else return Position.NONE;
+			if(!sJudge||(!sFunc&&sJudge))return Position.SOUTH;else return Position.NONE;
 		else if(Math.sqrt(Math.pow(this.p.getX()+this.length-x, 2)+Math.pow(this.p.getY()+this.width*0.5-y, 2))<=6)//右方圆圈
-			if(!eJudge)return Position.EAST;else return Position.NONE;
+			if(!eJudge||(!eFunc&&eJudge))return Position.EAST;else return Position.NONE;
 		else
 			return Position.NONE;
 	}
@@ -300,14 +297,22 @@ abstract public class Shape {
 	//获得下一个图形
 	public Shape getNext()
 	{
-		if(nJudge&&nFunc)
+		if(nJudge&&nFunc) {
+			nArrow.setColorOn(Color.RED);
 			return this.nArrow.getEnd();
-		else if(wJudge&&wFunc)
+		}
+		else if(wJudge&&wFunc) {
+			wArrow.setColorOn(Color.RED);
 			return this.wArrow.getEnd();
-		else if(sJudge&&sFunc)
+		}
+		else if(sJudge&&sFunc) {
+			sArrow.setColorOn(Color.RED);
 			return this.sArrow.getEnd();
-		else if(eJudge&&eFunc)
+		}
+		else if(eJudge&&eFunc) {
+			eArrow.setColorOn(Color.RED);
 			return this.eArrow.getEnd();
+		}
 		else
 			return null;
 	}
@@ -315,6 +320,7 @@ abstract public class Shape {
 	public void deleteNArrow()
 	{
 		nJudge = false;
+
 		nArrow = null;
 	}
 	//删除西箭头
@@ -390,9 +396,16 @@ abstract public class Shape {
 			int textWidth = fm.stringWidth(this.code);
 			int SWidth = (int)(this.length - textWidth)/2;
 			int SHeight = (int)(this.width - textHeight)/2;
+			String Default = "...";
+			int DeHeight = fm.getHeight();
+			int DeWidth = fm.stringWidth(Default);
+			int DWidth = (int)(this.length - DeWidth)/2;
+			int DHeight = (int)(this.width - DeHeight)/2;
 			// 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
 			if(SWidth>0&&SHeight>0)
-				g.drawString(this.code,(int)this.p.getX()+SWidth,(int)this.p.getY()+SHeight+textHeight-3);  
+				g.drawString(this.code,(int)this.p.getX()+SWidth,(int)this.p.getY()+SHeight+textHeight-3);
+			else if(DWidth>0&&DHeight>0)
+				g.drawString(Default,(int)this.p.getX()+DWidth,(int)this.p.getY()+DHeight+DeHeight-3);
 		}
 	}
 	//大写转小写
@@ -417,6 +430,16 @@ abstract public class Shape {
 	public void setExecute(CodeExecute codeExecute)
 	{
 		this.execute = codeExecute;
+	}
+	//设置代码生成
+	public void setGenerate(CodeGenerate codeGenerate)
+	{
+		this.generate = codeGenerate;
+	}
+	//获得代码
+	public String getCode()
+	{
+		return code;
 	}
 	/*
 	//显示窗口

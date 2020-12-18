@@ -4,19 +4,16 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -25,7 +22,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class MyParallelogram extends Shape{
@@ -66,18 +62,16 @@ public class MyParallelogram extends Shape{
 	public void drawEntity(Graphics2D g) {
 		double x = super.p.getX();
 		double y = super.p.getY();
+		if(color != null&&color.equals(Color.RED))
+			g.setColor(Color.RED);
+		else
+			g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(B));
 		g.draw(new Line2D.Double(x,y+super.width,x+super.length*0.2,y));
 		g.draw(new Line2D.Double(x,y+super.width,x+super.length*0.8,y+super.width));
 		g.draw(new Line2D.Double(x+super.length,y,x+super.length*0.2,y));
 		g.draw(new Line2D.Double(x+super.length,y,x+super.length*0.8,y+super.width));
 		drawCode(g);
-	}
-
-	@Override
-	public String writeObject() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -89,16 +83,16 @@ public class MyParallelogram extends Shape{
 	public void connectPoint(Graphics2D g) {
 		//画四边小圆形
 		g.setStroke(new BasicStroke(1));
-		if(!nJudge)g.draw(new Ellipse2D.Double(super.p.getX()+super.length*0.5-5, super.p.getY()-5, 10, 10));
-		if(!wJudge)g.draw(new Ellipse2D.Double(super.p.getX()+super.length*0.1-5, super.p.getY()+super.width*0.5-5, 10, 10));
-		if(!sJudge)g.draw(new Ellipse2D.Double(super.p.getX()+super.length*0.5-5, super.p.getY()+super.width-5, 10, 10));
-		if(!eJudge)g.draw(new Ellipse2D.Double(super.p.getX()+super.length*0.9-5, super.p.getY()+super.width*0.5-5, 10, 10));
+		if(!nJudge||(!nFunc&&nJudge))g.draw(new Ellipse2D.Double(super.p.getX()+super.length*0.5-5, super.p.getY()-5, 10, 10));
+		if(!wJudge||(!wFunc&&wJudge))g.draw(new Ellipse2D.Double(super.p.getX()+super.length*0.1-5, super.p.getY()+super.width*0.5-5, 10, 10));
+		if(!sJudge||(!sFunc&&sJudge))g.draw(new Ellipse2D.Double(super.p.getX()+super.length*0.5-5, super.p.getY()+super.width-5, 10, 10));
+		if(!eJudge||(!eFunc&&eJudge))g.draw(new Ellipse2D.Double(super.p.getX()+super.length*0.9-5, super.p.getY()+super.width*0.5-5, 10, 10));
 		//小圆形填充白色
 		g.setColor(Color.WHITE);
-		if(!nJudge)g.fill(new Ellipse2D.Double(super.p.getX()+super.length*0.5-4.5, super.p.getY()-4.5, 9, 9));
-		if(!wJudge)g.fill(new Ellipse2D.Double(super.p.getX()+super.length*0.1-4.5, super.p.getY()+super.width*0.5-4.5, 9, 9));
-		if(!sJudge)g.fill(new Ellipse2D.Double(super.p.getX()+super.length*0.5-4.5, super.p.getY()+super.width-4.5, 9, 9));
-		if(!eJudge)g.fill(new Ellipse2D.Double(super.p.getX()+super.length*0.9-4.5, super.p.getY()+super.width*0.5-4.5, 9, 9));
+		if(!nJudge||(!nFunc&&nJudge))g.fill(new Ellipse2D.Double(super.p.getX()+super.length*0.5-4.5, super.p.getY()-4.5, 9, 9));
+		if(!wJudge||(!wFunc&&wJudge))g.fill(new Ellipse2D.Double(super.p.getX()+super.length*0.1-4.5, super.p.getY()+super.width*0.5-4.5, 9, 9));
+		if(!sJudge||(!sFunc&&sJudge))g.fill(new Ellipse2D.Double(super.p.getX()+super.length*0.5-4.5, super.p.getY()+super.width-4.5, 9, 9));
+		if(!eJudge||(!eFunc&&eJudge))g.fill(new Ellipse2D.Double(super.p.getX()+super.length*0.9-4.5, super.p.getY()+super.width*0.5-4.5, 9, 9));
 	}
 	//获得坐标点
 	public MyPoint getPoint(Position p)
@@ -122,13 +116,13 @@ public class MyParallelogram extends Shape{
 		double x=pIn.getX();
 		double y=pIn.getY();
 		if(Math.sqrt(Math.pow(this.p.getX()+this.length*0.5-x, 2)+Math.pow(this.p.getY()-y, 2))<=6)//上方圆圈
-			if(!eJudge)return Position.NORTH;else return Position.NONE;
+			if(!nJudge||(!nFunc&&nJudge))return Position.NORTH;else return Position.NONE;
 		else if(Math.sqrt(Math.pow(this.p.getX()+this.length*0.1-x, 2)+Math.pow(this.p.getY()+this.width*0.5-y, 2))<=6)//左方圆圈
-			if(!wJudge)return Position.WEST;else return Position.NONE;
+			if(!wJudge||(!wFunc&&wJudge))return Position.WEST;else return Position.NONE;
 		else if(Math.sqrt(Math.pow(this.p.getX()+this.length*0.5-x, 2)+Math.pow(this.p.getY()+this.width-y, 2))<=6)//下方圆圈
-			if(!sJudge)return Position.SOUTH;else return Position.NONE;
+			if(!sJudge||(!sFunc&&sJudge))return Position.SOUTH;else return Position.NONE;
 		else if(Math.sqrt(Math.pow(this.p.getX()+this.length*0.9-x, 2)+Math.pow(this.p.getY()+this.width*0.5-y, 2))<=6)//右方圆圈
-			if(!eJudge)return Position.EAST;else return Position.NONE;
+			if(!eJudge||(!eFunc&&eJudge))return Position.EAST;else return Position.NONE;
 		else
 			return Position.NONE;
 	}
@@ -160,7 +154,8 @@ public class MyParallelogram extends Shape{
 	//画代码
 	protected void drawCode(Graphics2D g)
 	{
-		if(this.code != null) {
+		if(this.code != null)
+		{
 			Font font=new Font("宋体",Font.PLAIN,20);  
 			g.setFont(font);  
 			// 抗锯齿
@@ -171,24 +166,32 @@ public class MyParallelogram extends Shape{
 			int textWidth = fm.stringWidth(this.code);
 			int SWidth = (int)(this.length - textWidth)/2;
 			int SHeight = (int)(this.width - textHeight)/2;
+			String Default = "...";
+			int DeHeight = fm.getHeight();
+			int DeWidth = fm.stringWidth(Default);
+			int DWidth = (int)(this.length - DeWidth)/2;
+			int DHeight = (int)(this.width - DeHeight)/2;
 			// 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
 			if(SWidth-super.width*0.1>0&&SHeight>0)
-				g.drawString(this.code,(int)this.p.getX()+SWidth,(int)this.p.getY()+SHeight+textHeight-3);  
+				g.drawString(this.code,(int)this.p.getX()+SWidth,(int)this.p.getY()+SHeight+textHeight-3);
+			else if(DWidth>0&&DHeight>0)
+				g.drawString(Default,(int)this.p.getX()+DWidth,(int)this.p.getY()+DHeight+DeHeight-3);
 		}
 	}
 	@Override
-	public boolean contains(Point2D pIn) {
-		return this.state.contains(this, pIn);
-	}
-	//获得代码
-	public String getCode()
+	public boolean contains(Point2D pIn)
 	{
-		return code;
+		return this.state.contains(this, pIn);
 	}
 	//代码运行
 	public boolean codeRun()
 	{
 		return execute.codeExecution(this,this.parent,this.InOut);
+	}
+	//代码生成
+	@Override
+	public String codeGen(int num) {
+		return generate.codeGenerate(this,num);
 	}
 	//显示窗口
 	public boolean showDialog(Component parent)

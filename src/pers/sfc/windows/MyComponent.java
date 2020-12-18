@@ -13,7 +13,7 @@ import javax.swing.JComponent;
 
 import pers.sfc.shapes.Func;
 import pers.sfc.shapes.MyArrow;
-import pers.sfc.shapes.MyPoint;
+import pers.sfc.shapes.NormalState;
 import pers.sfc.shapes.Position;
 import pers.sfc.shapes.SelectState;
 import pers.sfc.shapes.SelectedState;
@@ -98,13 +98,12 @@ public class MyComponent extends JComponent{
 		return null;
 	}
 	//删除图形
-	@SuppressWarnings("unlikely-arg-type")
 	public void delete()
 	{
 		Shape s = myDocument.getFirst();
 		if(s != null && s.getState().getClass().getName().equals("pers.sfc.shapes.SelectState"))
 		{
-			System.out.println(1);
+			s.deleteArrow(myDocument);
 			myDocument.remove(s);
 		}
 		repaint();
@@ -114,6 +113,7 @@ public class MyComponent extends JComponent{
 	{
 		public void mousePressed(MouseEvent event)
 		{
+			resetColor();
 			last = current;
 			if((current = myDocument.findIn(event.getPoint())) != null || (current = myDocument.findOn(event.getPoint())) != null) 
 			{
@@ -136,6 +136,7 @@ public class MyComponent extends JComponent{
 		}
 		public void mouseClicked(MouseEvent event)
 		{
+			resetColor();
 			if(current != null&&!current.clickedPoint(event.getPoint()).equals(Position.NONE))
 			{
 				if(startP == null)
@@ -157,6 +158,7 @@ public class MyComponent extends JComponent{
 							var Arrow = new MyArrow(startShape,endShape,startP,endP);
 							myDocument.update(Arrow);
 							startShape.strongBackState();
+							endShape.strongBackState();
 							//start = end = null;
 							startShape = endShape = null;
 							startP = endP = null;
@@ -187,6 +189,7 @@ public class MyComponent extends JComponent{
 		private int state = -1,p;
 		public void mouseMoved(MouseEvent event)
 		{
+			resetColor();
 			Shape s;
 			if(current!=null&&!current.clickedPoint(event.getPoint()).equals(Position.NONE))
 			{
@@ -215,7 +218,9 @@ public class MyComponent extends JComponent{
 			}
 		}
 
-		public void mouseDragged(MouseEvent event) {
+		public void mouseDragged(MouseEvent event) 
+		{
+			resetColor();
 			double newX = event.getX();
 			double newY = event.getY();
 			if(state == 0)
@@ -226,5 +231,21 @@ public class MyComponent extends JComponent{
 			y = newY;
 			repaint();
 		}
+	}
+	//暂停
+	public void sleep()
+	{
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	//重置所有图形的颜色
+	public void resetColor()
+	{
+		for(Shape s ;(s = myDocument.getNext()) != null;)
+			s.setColorOn(Color.BLACK);
 	}
 }

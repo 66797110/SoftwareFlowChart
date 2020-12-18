@@ -2,6 +2,7 @@ package pers.sfc.shapes;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Graphics2D;
@@ -23,8 +24,11 @@ public class MyDiamond extends Shape{
 	private MyArrow arrow2;
 	private Position pos1;
 	private Position pos2;
+	private Position truePos;
+	private Position falsePos;
 	private MyArrow trueArrow;
 	private MyArrow falseArrow;
+	private int Judge;
 	public MyDiamond(MyPoint p,double length,double width)
 	{
 		super.p = p;
@@ -37,6 +41,7 @@ public class MyDiamond extends Shape{
 		this.trueArrow = null;
 		this.falseArrow = null;
 		super.func = Func.JUDGE;
+		this.Judge = -1;
 	}
 
 	public MyDiamond(double x,double y,double length,double width)
@@ -67,6 +72,10 @@ public class MyDiamond extends Shape{
 	public void drawEntity(Graphics2D g) {
 		double x = super.p.getX();
 		double y = super.p.getY();
+		if(color != null&&color.equals(Color.RED))
+			g.setColor(Color.RED);
+		else
+			g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(B));
 		g.draw(new Line2D.Double(x,y+super.width/2,x+super.length/2,y));
 		g.draw(new Line2D.Double(x,y+super.width/2,x+super.length/2,y+super.width));
@@ -75,12 +84,60 @@ public class MyDiamond extends Shape{
 		drawCode(g);
 	}
 
-	@Override
-	public String writeObject() {
-		// TODO Auto-generated method stub
-		return null;
+	//获得下一个图形
+	public Shape getNext()
+	{
+		if(Judge == 1)
+			return getTNext();
+		else if(Judge == 0)
+			return getFNext();
+		else
+			return null;
 	}
-
+	//获得下一个正确图形
+	public Shape getTNext()
+	{
+		if(nJudge&&nFunc&&truePos.equals(Position.NORTH)) {
+			nArrow.setColorOn(Color.RED);
+			return this.nArrow.getEnd();
+		}
+		else if(wJudge&&wFunc&&truePos.equals(Position.WEST)) {
+			wArrow.setColorOn(Color.RED);
+			return this.wArrow.getEnd();
+		}
+		else if(sJudge&&sFunc&&truePos.equals(Position.SOUTH)) {
+			sArrow.setColorOn(Color.RED);
+			return this.sArrow.getEnd();
+		}
+		else if(eJudge&&eFunc&&truePos.equals(Position.EAST)) {
+			eArrow.setColorOn(Color.RED);
+			return this.eArrow.getEnd();
+		}
+		else
+			return null;
+	}
+	//获得下一个错误图形
+	public Shape getFNext()
+	{
+		if(nJudge&&nFunc&&falsePos.equals(Position.NORTH)) {
+			nArrow.setColorOn(Color.RED);
+			return this.nArrow.getEnd();
+		}
+		else if(wJudge&&wFunc&&falsePos.equals(Position.WEST)) {
+			wArrow.setColorOn(Color.RED);
+			return this.wArrow.getEnd();
+		}
+		else if(sJudge&&sFunc&&falsePos.equals(Position.SOUTH)) {
+			sArrow.setColorOn(Color.RED);
+			return this.sArrow.getEnd();
+		}
+		else if(eJudge&&eFunc&&falsePos.equals(Position.EAST)) {
+			eArrow.setColorOn(Color.RED);
+			return this.eArrow.getEnd();
+		}
+		else
+			return null;
+	}
 	@Override
 	public void draw(Graphics2D g) {
 		state.draw(this, g);
@@ -90,16 +147,16 @@ public class MyDiamond extends Shape{
 	public boolean contains(Point2D pIn) {
 		return this.state.contains(this, pIn);
 	}
-	//获得代码
-	public String getCode()
-	{
-		return code;
-	}
 	//代码运行
 	public boolean codeRun()
 	{
-		//return execute.codeExecution(this);
-	return true;
+		Judge = execute.codeExecution(this);
+		return true;
+	}
+	//代码生成
+	@Override
+	public String codeGen(int num) {
+		return generate.codeGenerate(this,num);
 	}
 	//作为开始标记变量++
 	public void startPlus()
@@ -108,6 +165,7 @@ public class MyDiamond extends Shape{
 			asStart++;
 	}
 	//确定是否连接连接点
+	/*
 	public void setConnect(Position p,MyArrow arrow)
 	{
 		if(pos1 == null)
@@ -165,6 +223,7 @@ public class MyDiamond extends Shape{
 		else if(this.arrow2 == null)
 			this.arrow2 = arrow;
 	}
+	 */
 	//显示窗口
 	public boolean showDialog(Component parent)
 	{
@@ -172,11 +231,17 @@ public class MyDiamond extends Shape{
 		boolean ok;
 		if(ok = dialog.showDialog(parent, "代码输入"))
 		{
+			truePos = dialog.getTOut();
+			falsePos = dialog.getFOut();
 			super.code = dialog.getFunction();
 		}
 		return ok;
 	}
-
+	//设置出口条件
+	public void setJudge(int judge)
+	{
+		this.Judge = -1;
+	}
 	//私有窗口类
 	private class MyDialog extends JPanel
 	{
@@ -247,6 +312,34 @@ public class MyDiamond extends Shape{
 		public String getFunction()
 		{
 			return codeInput.getText();
+		}
+		//获得正确出口
+		public Position getTOut()
+		{
+			if(trueNorth.isSelected())
+				return Position.NORTH;
+			else if(trueWest.isSelected())
+				return Position.WEST;
+			else if(trueSouth.isSelected())
+				return Position.SOUTH;
+			else if(trueEast.isSelected())
+				return Position.EAST;
+			else
+				return Position.NONE;
+		}
+		//获得错误出口
+		public Position getFOut()
+		{
+			if(falseNorth.isSelected())
+				return Position.NORTH;
+			else if(falseWest.isSelected())
+				return Position.WEST;
+			else if(falseSouth.isSelected())
+				return Position.SOUTH;
+			else if(falseEast.isSelected())
+				return Position.EAST;
+			else
+				return Position.NONE;
 		}
 		//显示窗口
 		public boolean showDialog(Component parent,String title)

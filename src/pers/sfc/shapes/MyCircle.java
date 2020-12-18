@@ -2,6 +2,7 @@ package pers.sfc.shapes;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Frame;
@@ -35,7 +36,6 @@ public class MyCircle extends Shape{
 	{
 		this(new MyPoint(),40,40);
 	}
-
 	@Override
 	public boolean containsN(Point2D p) {
 		if(Math.sqrt(Math.pow(width*0.5+super.p.getX()-p.getX(), 2)+Math.pow(width*0.5+super.p.getY()-p.getY(), 2))<=width*0.5)
@@ -45,15 +45,13 @@ public class MyCircle extends Shape{
 
 	@Override
 	public void drawEntity(Graphics2D g) {
+		if(color != null&&color.equals(Color.RED))
+			g.setColor(Color.RED);
+		else
+			g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(B));
 		g.draw(new Ellipse2D.Double(super.p.getX(), super.p.getY(), super.length, super.width));
 		drawCode(g);
-	}
-
-	@Override
-	public String writeObject() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -64,6 +62,7 @@ public class MyCircle extends Shape{
 	@Override
 	public void onSize(double newX,double newY,double oldX,double oldY,int state)
 	{
+		/*
 		double disWL;
 		if(newY-oldY<newX-oldX)
 			disWL=newX-oldX;
@@ -91,21 +90,22 @@ public class MyCircle extends Shape{
 			this.width += disWL;
 			break;
 		}
+		*/
 	}
 
 	@Override
 	public boolean contains(Point2D pIn) {
 		return this.state.contains(this, pIn);
 	}
-	//获得代码
-	public String getCode()
-	{
-		return code;
-	}
 	//代码运行
 	public boolean codeRun()
 	{
 		return execute.codeExecution(this);
+	}
+	//代码生成
+	@Override
+	public String codeGen(int num) {
+		return generate.codeGenerate(this,num);
 	}
 	//显示窗口
 	public boolean showDialog(Component parent)

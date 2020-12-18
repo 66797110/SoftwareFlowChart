@@ -8,7 +8,7 @@ public class NormalState implements State{
 
 	@Override
 	public void draw(Shape s, Graphics2D g) {
-		g.setColor(Color.BLACK);
+		//g.setColor(Color.BLACK);
 		s.drawEntity(g);
 	}
 

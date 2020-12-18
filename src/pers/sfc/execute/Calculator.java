@@ -3,7 +3,312 @@ package pers.sfc.execute;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
+
+public class Calculator {
+    /**
+     * 
+     * @Title: PrepareParam
+     * @Desc: 准备计算的数据，符号
+     *
+     * @param str计算式
+     * @return 计算结果
+     *
+     */
+    public Double calculator(String str) {
+        // 空值校验
+        if (null == str || "".equals(str)) {
+            return null;
+        }
+        // 长度校验
+        if (str.length() > MyUtils.FORMAT_MAX_LENGTH) {
+            System.out.println("表达式过长！");
+            return null;
+        }
+        // 预处理
+        str = str.replaceAll(" ", "");// 去空格
+        if ('-' == str.charAt(0)) {// 开头为负数，如-1，改为0-1
+            str = 0 + str;
+        }
+        // 校验格式
+        if (!MyUtils.checkFormat(str)) {
+            System.out.println("表达式错误！");
+            return null;
+        }
+        // 处理表达式，改为标准表达式
+        str = MyUtils.change2StandardFormat(str);
+        // 拆分字符和数字
+        String[] nums = str.split("[^.0-9]");
+        List<Double> numLst = new ArrayList();
+        for (int i = 0; i < nums.length; i++) {
+            if (!"".equals(nums[i])) {
+                numLst.add(Double.parseDouble(nums[i]));
+            }
+        }
+        String symStr = str.replaceAll("[.0-9]", "");
+        return doCalculate(symStr, numLst);
+    }
+
+    /**
+     * 
+     * @Title: doCalculate
+     * @Desc: 计算
+     *
+     * @param symStr符号串
+     * @param numLst数字集合
+     * @return 计算结果
+     *
+     */
+    public Double doCalculate(String symStr, List<Double> numLst) {
+        LinkedList<Character> symStack = new LinkedList<>();// 符号栈
+        LinkedList<Double> numStack = new LinkedList<>();// 数字栈
+        double result = 0;
+        int i = 0;// numLst的标志位
+        int j = 0;// symStr的标志位
+        char sym;// 符号
+        double num1, num2;// 符号前后两个数
+        while (symStack.isEmpty() || !(symStack.getLast() == '=' && symStr.charAt(j) == '=')) {// 形如：
+                                                                                                // =8=
+                                                                                                // 则退出循环，结果为8
+            if (symStack.isEmpty()) {
+                symStack.add('=');
+                numStack.add(numLst.get(i++));
+            }
+            if (MyUtils.symLvMap.get(symStr.charAt(j)) > MyUtils.symLvMap.get(symStack.getLast())) {// 比较符号优先级，若当前符号优先级大于前一个则压栈
+                if (symStr.charAt(j) == '(') {
+                    symStack.add(symStr.charAt(j++));
+                    continue;
+                }
+                numStack.add(numLst.get(i++));
+                symStack.add(symStr.charAt(j++));
+            } else {// 当前符号优先级小于等于前一个 符号的优先级
+                if (symStr.charAt(j) == ')' && symStack.getLast() == '(') {// 若（）之间没有符号，则“（”出栈
+                    j++;
+                    symStack.removeLast();
+                    continue;
+                }
+                if (symStack.getLast() == '(') {// “（”直接压栈
+                    numStack.add(numLst.get(i++));
+                    symStack.add(symStr.charAt(j++));
+                    continue;
+                }
+                num2 = numStack.removeLast();
+                num1 = numStack.removeLast();
+                sym = symStack.removeLast();
+                switch (sym) {
+                case '+':
+                    numStack.add(MyUtils.plus(num1, num2));
+                    break;
+                case '-':
+                    numStack.add(MyUtils.reduce(num1, num2));
+                    break;
+                case '*':
+                    numStack.add(MyUtils.multiply(num1, num2));
+                    break;
+                case '/':
+                    if (num2 == 0) {// 除数为0
+                        System.out.println("存在除数为0");
+                        return null;
+                    }
+                    numStack.add(MyUtils.divide(num1, num2));
+                    break;
+                }
+            }
+        }
+        return numStack.removeLast();
+    }
+    private static class MyUtils {
+        public static final int FORMAT_MAX_LENGTH = 500;// 表达式最大长度限制
+        public static final int RESULT_DECIMAL_MAX_LENGTH = 8;// 结果小数点最大长度限制
+        public static final Map<Character, Integer> symLvMap = new HashMap<Character, Integer>();// 符号优先级map
+        static {
+            symLvMap.put('=', 0);
+            symLvMap.put('-', 1);
+            symLvMap.put('+', 1);
+            symLvMap.put('*', 2);
+            symLvMap.put('/', 2);
+            symLvMap.put('(', 3);
+            symLvMap.put(')', 1);
+            // symLvMap.put('^', 3);
+            // symLvMap.put('%', 3);
+        }
+
+        /**
+         * 
+         * @Title: checkFormat
+         * @Desc: 检查表达式格式是否正确
+         *
+         * @param str表达式
+         * @return true表达式正确，false表达式错误
+         *
+         */
+        public static boolean checkFormat(String str) {
+            // 校验是否以“=”结尾
+            if ('=' != str.charAt(str.length() - 1)) {
+                return false;
+            }
+            // 校验开头是否为数字或者“(”
+            if (!(isCharNum(str.charAt(0)) || str.charAt(0) == '(')) {
+                return false;
+            }
+            char c;
+            // 校验
+            for (int i = 1; i < str.length() - 1; i++) {
+                c = str.charAt(i);
+                if (!isCorrectChar(c)) {// 字符不合法
+                    return false;
+                }
+                if (!(isCharNum(c))) {
+                    if (c == '-' || c == '+' || c == '*' || c == '/') {
+                        if (c == '-' && str.charAt(i - 1) == '(') {// 1*(-2+3)的情况
+                            continue;
+                        }
+                        if (!(isCharNum(str.charAt(i - 1)) || str.charAt(i - 1) == ')')) {// 若符号前一个不是数字或者“）”时
+                            return false;
+                        }
+                    }
+                    if (c == '.') {
+                        if (!isCharNum(str.charAt(i - 1)) || !isCharNum(str.charAt(i + 1))) {// 校验“.”的前后是否位数字
+                            return false;
+                        }
+                    }
+                }
+            }
+            return isBracketCouple(str);// 校验括号是否配对
+        }
+
+        /**
+         * 
+         * @Title: change2StandardFormat
+         * @Desc: 处理表达式格式为标准格式，如2(-1+2)(3+4)改为2*(0-1+2)*(3+4)
+         *
+         * @param str
+         * @return 标准表达式
+         *
+         */
+        public static String change2StandardFormat(String str) {
+            StringBuilder sb = new StringBuilder();
+            char c;
+            for (int i = 0; i < str.length(); i++) {
+                c = str.charAt(i);
+                if (i != 0 && c == '(' && (isCharNum(str.charAt(i - 1)) || str.charAt(i - 1) == ')')) {
+                    sb.append("*(");
+                    continue;
+                }
+                if (c == '-' && str.charAt(i - 1) == '(') {
+                    sb.append("0-");
+                    continue;
+                }
+                sb.append(c);
+            }
+            return sb.toString();
+        }
+
+        /**
+         * 
+         * @Title: isBracketCouple
+         * @Desc: 校验括号是否配对
+         * @param str
+         * @return 参数
+         *
+         */
+        public static boolean isBracketCouple(String str) {
+            LinkedList<Character> stack = new LinkedList<>();
+            for (char c : str.toCharArray()) {
+                if (c == '(') {
+                    stack.add(c);
+                } else if (c == ')') {
+                    if (stack.isEmpty()) {
+                        return false;
+                    }
+                    stack.removeLast();
+                }
+            }
+            if (stack.isEmpty()) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+        /**
+         * 
+         * @Title: formatResult
+         * @Desc: 处理计算结果的显示
+         *
+         * @param str计算结果
+         * @return 规范的计算结果
+         *
+         */
+        public static String formatResult(String str) {
+            String[] ss = str.split("\\.");
+            if (Integer.parseInt(ss[1]) == 0) {
+                return ss[0];// 整数
+            }
+            String s1 = new StringBuilder(ss[1]).reverse().toString();
+            int start = 0;
+            for (int i = 0; i < s1.length(); i++) {
+                if (s1.charAt(i) != '0') {
+                    start = i;
+                    break;
+                }
+            }
+            return ss[0] + "." + new StringBuilder(s1.substring(start, s1.length())).reverse();
+        }
+
+        /**
+         * 
+         * @Title: isCorrectChar
+         * @Desc: 校验字符是否合法
+         *
+         * @param c
+         * @return 参数
+         *
+         */
+        public static boolean isCorrectChar(Character c) {
+            if (('0' <= c && c <= '9') || c == '-' || c == '+' || c == '*' || c == '/' || c == '(' || c == ')'
+                    || c == '.') {
+                return true;
+            }
+            return false;
+        }
+
+        public static boolean isCharNum(Character c) {
+            if (c >= '0' && c <= '9') {
+                return true;
+            }
+            return false;
+
+        }
+
+        public static double plus(double num1, double num2) {
+            return num1 + num2;
+        }
+
+        public static double reduce(double num1, double num2) {
+            return num1 - num2;
+        }
+
+        public static double multiply(double num1, double num2) {
+            return num1 * num2;
+
+        }
+
+        public static double divide(double num1, double num2) {
+            return num1 / num2;
+        }
+    }
+}
+
+/*
 public class Calculator {
 	private enum Operator {
         ADD("+", 10), SUBTRACT("-", 10), MULTIPLY("*", 20), DIVIDE("/", 20),
@@ -15,11 +320,7 @@ public class Calculator {
             this.priority = priority;
         }
     }
-    /**
-     * 操作数枚举
-     * @author Jinjichao
-     *
-     */
+ 
     private enum Operand {
         ONE("1"), TWO("2"), THREE("3"), FOUR("4"), FIVE("5"), SIX("6"),
         SEVEN("7"), EIGHT("8"), NINE("9"), ZERO("0"), POINT(".");
@@ -28,12 +329,6 @@ public class Calculator {
             this.operand = operand;
         }
     }
-   
-    /**
-     * 获取字符串所对应的运算符枚举
-     * @param str
-     * @return
-     */
     private Operator getOperator(String str) {
         for (Operator op : Operator.values()) {
             if (str.equals(op.operator)) {
@@ -42,11 +337,7 @@ public class Calculator {
         }
         return null;
     }
-    /**
-     * 获取字符串所对应的操作数枚举
-     * @param str
-     * @return
-     */
+
     private Operand getOperand(String str) {
         for (Operand op : Operand.values()) {
             if (str.equals(op.operand)) {
@@ -55,12 +346,7 @@ public class Calculator {
         }
         return null;
     }   
-    /**
-     * 第1步: 将运算表达式字符串分解为运算表达式List
-     *
-     * @param exp
-     * @return
-     */
+
     private List<String> resolveExpr(String exp) {
         List<String> list = new LinkedList<String>();
         String temp = "";
@@ -88,11 +374,7 @@ public class Calculator {
         //System.out.println(list);
         return list;
     }
-    /**
-     * 第2步: 将运算表达式List转换为逆波兰表达式List
-     * @param expList
-     * @return
-     */
+
     private List<String> dealExpr(List<String> expList) {
         if(expList == null) {
             return null;
@@ -155,14 +437,7 @@ public class Calculator {
         //System.out.println(list);
         return list;
     }
-   
-    /**
-     * 操作数运算
-     * @param x
-     * @param y
-     * @param op
-     * @return
-     */
+
     private String operation(String x, String y, Operator op) {
         double a = 0.0;
         double b = 0.0;
@@ -187,12 +462,7 @@ public class Calculator {
             return null;
         }
     }
-   
-    /**
-     * 第3步: 逆波兰表达式运算
-     * @param exp
-     * @return
-     */
+
     public double calculator(String exp) {
         List<String> expList = dealExpr(resolveExpr(exp));
         if(expList == null) {
@@ -227,117 +497,4 @@ public class Calculator {
         }
         return Double.parseDouble(stack.pop());
     }   
-	/*
-	public int priority(char a) {//判断符号优先级
-		switch (a) {
-		case '+':
-		case '-':
-		case '(':
-			return 1;
-		case '*':
-		case '/':
-			return 2;
-		}
-		return 0;
-	}
-
-	public char[] middleToBack(String exp) {//中缀表达式转后缀表达式
-		Stack<Character> stack = new Stack<Character>();//栈用来进出运算的符号
-		char[] arr = exp.toCharArray();
-		char[] brr = new char[arr.length * 2];//保存后缀表达式，需在数字和符号之间加空格区分，因此长度定为arr的2倍
-		int count = 0;//标记brr
-
-		for (int i = 0; i < arr.length; i++) {
-			if (i == arr.length - 1) {//防止越界
-				brr[count++] = arr[i];
-				brr[count++] = ' ';
-			} else if ((arr[i] >= '0' && arr[i] <= '9') && !(arr[i + 1] >= '0' && arr[i + 1] <= '9')) {
-				brr[count++] = arr[i];
-				brr[count++] = ' ';
-			} else if (arr[i] >= '0' && arr[i] <= '9') {
-				brr[count++] = arr[i];
-			} else {//符号
-				if (stack.isEmpty()) {
-					stack.push(arr[i]);
-				} else if (arr[i] == '(') {
-					stack.push(arr[i]);
-				} else if (arr[i] == ')') {
-					while (stack.peek() != '(') {//'('与')'之间的符号出栈
-						brr[count++] = stack.peek();
-						brr[count++] = ' ';
-						stack.pop();
-					}
-					stack.pop();//将'('出栈
-				} else if (priority(arr[i]) >= priority(stack.peek())) {//如果优先级高于或等于栈顶元素，直接入栈
-					stack.push(arr[i]);
-				} else if (priority(arr[i]) < priority(stack.peek())) {//如果优先级低于栈顶元素，依次出栈
-					while (!stack.isEmpty()) {
-						brr[count++] = stack.peek();
-						brr[count++] = ' ';
-						stack.pop();
-					}
-					stack.push(arr[i]);
-				}
-			}
-		}
-		while (!stack.empty()) {
-			brr[count++] = stack.peek();
-			brr[count++] = ' ';
-			stack.pop();
-		}
-		return brr;
-	}
-
-	public double calculate(char[] brr) {//后缀表达式求得计算结果
-		Stack<Double> stack = new Stack<Double>();//栈用来进出运算的数字
-		for (int i = 0; i < brr.length; ) {
-			String number = "";
-			if (brr[i] == ' '||brr[i]=='\0') {//空格或为空
-				i++;
-				continue;
-			}
-			if (brr[i] >= '0' && brr[i] <= '9') {//数字入栈
-				while (brr[i] >= '0' && brr[i] <= '9') {
-					number += brr[i];
-					i++;
-				}
-				stack.push(Double.valueOf(number));//字符型转整型入栈
-			} else if(brr[i]=='+'||brr[i]=='-'||brr[i]=='*'||brr[i]=='/') {//符号
-				double top1 = stack.peek();
-				stack.pop();
-				double top2 = stack.peek();
-				stack.pop();
-				double result = operate(top2,top1,brr[i]);//注意top2和top1的位置
-				stack.push(result);
-				i++;
-			}
-		}
-		return stack.peek();
-	}
-
-	public double operate(double item1, double item2, char operator) {
-		double result = 0;
-		switch (operator) {
-		case '+':
-			result = item1 + item2;
-			break;
-		case '-':
-			result = item1 - item2;
-			break;
-		case '*':
-			result = item1 * item2;
-			break;
-		case '/':
-			result = item1 / item2;
-			break;
-		}
-		return result;
-	}
-	
-	public double calculator(String exp) {
-        char[] brr = middleToBack(exp);
-        //return Double.parseDouble(calculate(brr));
-        return calculate(brr);
-    }
-	*/
-}
+}*/

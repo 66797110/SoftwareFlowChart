@@ -2,23 +2,20 @@ package pers.sfc.shapes;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.RenderingHints;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 public class MyRectangle extends Shape{
@@ -55,19 +52,15 @@ public class MyRectangle extends Shape{
 	@Override
 	public void drawEntity(Graphics2D g)
 	{
+		if(color != null&&color.equals(Color.RED))
+			g.setColor(Color.RED);
+		else
+			g.setColor(Color.BLACK);
 		g.setStroke(new BasicStroke(B));
 		g.draw(new Rectangle2D.Double(super.p.getX(), super.p.getY(), super.length, super.width));
 		drawCode(g);
 	}
-	//序列化
-	@Override
-	public String writeObject()
-	{
-		String thisClass = " @MyRectangle";
-		String thisData = " @p = "+super.p.writeObject()+" @longth = "+super.length+" @width = "+super.width+" ";
-		return "</"+thisClass+thisData+"/>";
-	}
-
+	
 	@Override
 	public void draw(Graphics2D g) {
 		state.draw(this, g);
@@ -77,15 +70,15 @@ public class MyRectangle extends Shape{
 	public boolean contains(Point2D pIn) {
 		return this.state.contains(this, pIn);
 	}
-	//获得代码
-	public String getCode()
-	{
-		return code;
-	}
 	//代码运行
 	public boolean codeRun()
 	{
 		return execute.codeExecution(this);
+	}
+	//代码生成
+	@Override
+	public String codeGen(int num) {
+		return generate.codeGenerate(this,num);
 	}
 	//显示窗口
 	public boolean showDialog(Component parent)
@@ -103,7 +96,7 @@ public class MyRectangle extends Shape{
 	private class MyDialog extends JPanel
 	{
 		private static final long serialVersionUID = 2488127639285339811L;
-		private JTextField codeInput;
+		private JTextArea codeInput;
 		private JButton okButton;
 		private JButton cancelButton;
 		private JDialog dialog;
@@ -116,7 +109,12 @@ public class MyRectangle extends Shape{
 			var panel = new JPanel();
 			panel.setLayout(new GridLayout(2, 1));
 			panel.add(new JLabel("代码"));
-			panel.add(codeInput = new JTextField(""));
+			codeInput = new JTextArea(3,20);
+			codeInput.setLineWrap(true);
+			codeInput.setEditable(true);
+			JScrollPane pane=new JScrollPane(codeInput, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+			//panel.add(codeInput);
+			panel.add(pane);
 			add(panel, BorderLayout.CENTER);
 			//设置确定取消按钮
 			okButton = new JButton("Ok");
