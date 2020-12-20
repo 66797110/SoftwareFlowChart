@@ -34,7 +34,7 @@ public class ShapeExecute {
 			if(current!=null&&current.getClass().getName().equals("pers.sfc.shapes.MyCircle"))
 			{
 				for(Shape s;(s = myDocument.getNext())!=null;)
-					if(current.getCode().equals(s.getCode()))
+					if(s.getClass().getName().equals("pers.sfc.shapes.MyCircle")&&current.getCode().equals(s.getCode()))
 					{
 						s.setColorOn(Color.RED);
 						myComponent.repaint();

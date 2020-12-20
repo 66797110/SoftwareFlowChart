@@ -1,5 +1,6 @@
 package pers.sfc.execute;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,12 +11,14 @@ import javax.swing.JOptionPane;
 
 import pers.sfc.shapes.MyDiamond;
 import pers.sfc.shapes.Shape;
+import pers.sfc.windows.MyDocument;
 
 public class ShapeGenerate {
 	private Shape start;
 	private Shape end;
 	private Shape current;
 	private String code;
+	private MyDocument myDocument;
 	public void setStart(Shape start)
 	{
 		this.start = start;
@@ -28,6 +31,10 @@ public class ShapeGenerate {
 	{
 		this.start = start;
 		this.end = end;
+	}
+	public void setDoc(MyDocument myDocument)
+	{
+		this.myDocument = myDocument;
 	}
 	public void write()
 	{
@@ -76,6 +83,16 @@ public class ShapeGenerate {
 		{
 			if(current.codeGen(startWidth).equals("end"))
 				return code;
+			if(current!=null&&current.getClass().getName().equals("pers.sfc.shapes.MyCircle"))
+			{
+				for(Shape s;(s = myDocument.getNext())!=null;)
+					if(s.getClass().getName().equals("pers.sfc.shapes.MyCircle")&&current.getCode().equals(s.getCode()))
+					{
+						current = s;
+						myDocument.reset();
+						break;
+					}
+			}
 			if(current.getClass().getName().equals("pers.sfc.shapes.MyDiamond"))
 			{
 				if(((MyDiamond)current).equals(((MyDiamond)current).getTNext().getNext()))

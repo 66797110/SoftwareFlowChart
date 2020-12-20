@@ -269,6 +269,7 @@ public class MyFrame extends JFrame{
 				codeGenerate = new CodeGenerate();
 				myDocument.setGenerate(codeGenerate);
 				shapeGenerate.setStartEnd(myComponent.getStart(), myComponent.getEnd());
+				shapeGenerate.setDoc(myDocument);
 				shapeGenerate.write();
 			}
 		});

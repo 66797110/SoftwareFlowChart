@@ -27,7 +27,7 @@ abstract public class Shape {
 	protected double width; //宽
 	protected State state = new NormalState();
 	protected State lstate;
-	protected String code = null;
+	protected String code = "";
 	protected JTextField textField;
 	protected CodeExecute execute;//代码运行
 	protected CodeGenerate generate;//代码生成
