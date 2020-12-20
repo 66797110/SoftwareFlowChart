@@ -11,17 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-
 public class Calculator {
-    /**
-     * 
-     * @Title: PrepareParam
-     * @Desc: 准备计算的数据，符号
-     *
-     * @param str计算式
-     * @return 计算结果
-     *
-     */
     public Double calculator(String str) {
         // 空值校验
         if (null == str || "".equals(str)) {
@@ -56,16 +46,6 @@ public class Calculator {
         return doCalculate(symStr, numLst);
     }
 
-    /**
-     * 
-     * @Title: doCalculate
-     * @Desc: 计算
-     *
-     * @param symStr符号串
-     * @param numLst数字集合
-     * @return 计算结果
-     *
-     */
     public Double doCalculate(String symStr, List<Double> numLst) {
         LinkedList<Character> symStack = new LinkedList<>();// 符号栈
         LinkedList<Double> numStack = new LinkedList<>();// 数字栈
@@ -140,15 +120,6 @@ public class Calculator {
             // symLvMap.put('%', 3);
         }
 
-        /**
-         * 
-         * @Title: checkFormat
-         * @Desc: 检查表达式格式是否正确
-         *
-         * @param str表达式
-         * @return true表达式正确，false表达式错误
-         *
-         */
         public static boolean checkFormat(String str) {
             // 校验是否以“=”结尾
             if ('=' != str.charAt(str.length() - 1)) {
@@ -184,15 +155,6 @@ public class Calculator {
             return isBracketCouple(str);// 校验括号是否配对
         }
 
-        /**
-         * 
-         * @Title: change2StandardFormat
-         * @Desc: 处理表达式格式为标准格式，如2(-1+2)(3+4)改为2*(0-1+2)*(3+4)
-         *
-         * @param str
-         * @return 标准表达式
-         *
-         */
         public static String change2StandardFormat(String str) {
             StringBuilder sb = new StringBuilder();
             char c;
@@ -211,14 +173,6 @@ public class Calculator {
             return sb.toString();
         }
 
-        /**
-         * 
-         * @Title: isBracketCouple
-         * @Desc: 校验括号是否配对
-         * @param str
-         * @return 参数
-         *
-         */
         public static boolean isBracketCouple(String str) {
             LinkedList<Character> stack = new LinkedList<>();
             for (char c : str.toCharArray()) {
@@ -239,15 +193,6 @@ public class Calculator {
 
         }
 
-        /**
-         * 
-         * @Title: formatResult
-         * @Desc: 处理计算结果的显示
-         *
-         * @param str计算结果
-         * @return 规范的计算结果
-         *
-         */
         public static String formatResult(String str) {
             String[] ss = str.split("\\.");
             if (Integer.parseInt(ss[1]) == 0) {
@@ -264,15 +209,6 @@ public class Calculator {
             return ss[0] + "." + new StringBuilder(s1.substring(start, s1.length())).reverse();
         }
 
-        /**
-         * 
-         * @Title: isCorrectChar
-         * @Desc: 校验字符是否合法
-         *
-         * @param c
-         * @return 参数
-         *
-         */
         public static boolean isCorrectChar(Character c) {
             if (('0' <= c && c <= '9') || c == '-' || c == '+' || c == '*' || c == '/' || c == '(' || c == ')'
                     || c == '.') {
@@ -497,4 +433,5 @@ public class Calculator {
         }
         return Double.parseDouble(stack.pop());
     }   
-}*/
+}
+*/

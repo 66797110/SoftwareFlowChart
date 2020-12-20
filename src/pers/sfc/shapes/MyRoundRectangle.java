@@ -118,6 +118,10 @@ public class MyRoundRectangle extends Shape{
 			bg.add(end = new JRadioButton("结束"));
 			panel.add(start);
 			panel.add(end);
+			if(code.equals("start"))
+				start.setSelected(true);
+			else if(code.equals("end"))
+				end.setSelected(true);
 			add(panel, BorderLayout.CENTER);
 			//设置确定取消按钮
 			okButton = new JButton("Ok");

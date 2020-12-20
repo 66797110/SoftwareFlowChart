@@ -69,10 +69,37 @@ public class CodeExecute{
 				else if(ch[i]=='=')
 				{
 					vbf.delete(0, vbf.length());
-					for(i++;i<ch.length&&ch[i]==' ';i++);
-					for(;'0'<=ch[i]&&ch[i]<='9'&&i<ch.length;i++)
-						vbf.append(ch[i]);
-					var.setVar(Double.parseDouble(vbf.toString()));
+					sbf.delete(0, sbf.length());
+					for(i++;i<ch.length;i++)
+					{
+						if(i<ch.length&&ch[i]==' ')continue;
+						for(;i<ch.length&&(('a'<=ch[i]&&ch[i]<='z')||('A'<=ch[i]&&ch[i]<='Z')||ch[i]=='_');i++)
+							vbf.append(ch[i]);
+						if(vbf.length() != 0)
+						{
+							opNum = null;
+							for(int j = 0;j<list.size();j++)
+								if(list.get(j).getName().equals(vbf.toString()))
+								{
+									opNum = list.get(j);
+									break;
+								}
+							vbf.delete(0, vbf.length());
+							if(opNum.getVar()<0&&sbf.charAt(sbf.length()-1)!='(')
+								sbf.append("("+opNum.getVar()+")");
+							else
+								sbf.append(""+opNum.getVar());
+						}
+						if(i<ch.length&&ch[i]==' ')continue;
+						for(;i<ch.length&&(('0'<=ch[i]&&ch[i]<='9')||ch[i]=='+'||ch[i]=='-'||ch[i]=='*'||ch[i]=='/'||ch[i]=='('||ch[i]==')');i++)
+							sbf.append(ch[i]);
+						if(i<ch.length&&ch[i]==';')break;
+						i--;
+					}
+					sbf.append("+0=");
+					Calculator cal = new Calculator();
+					double value = cal.calculator(sbf.toString());
+					var.setVar(value);
 					list.add(var);
 				}
 				else
@@ -106,7 +133,7 @@ public class CodeExecute{
 									break;
 								}
 							vbf.delete(0, vbf.length());
-							if(opNum.getVar()<0)
+							if(opNum.getVar()<0&&sbf.charAt(sbf.length()-1)!='(')
 								sbf.append("("+opNum.getVar()+")");
 							else
 								sbf.append(""+opNum.getVar());

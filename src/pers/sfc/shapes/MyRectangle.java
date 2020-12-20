@@ -112,6 +112,7 @@ public class MyRectangle extends Shape{
 			codeInput = new JTextArea(3,20);
 			codeInput.setLineWrap(true);
 			codeInput.setEditable(true);
+			codeInput.setText(code);
 			JScrollPane pane=new JScrollPane(codeInput, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 			//panel.add(codeInput);
 			panel.add(pane);

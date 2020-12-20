@@ -136,7 +136,7 @@ public class MyCircle extends Shape{
 			var panel = new JPanel();
 			panel.setLayout(new GridLayout(1, 2));
 			panel.add(new JLabel("名称"));
-			panel.add(codeInput = new JTextField(""));
+			panel.add(codeInput = new JTextField(code));
 			add(panel, BorderLayout.CENTER);
 			//设置确定取消按钮
 			okButton = new JButton("Ok");

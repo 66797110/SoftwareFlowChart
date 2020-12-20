@@ -272,7 +272,7 @@ public class MyDiamond extends Shape{
 			falseGroup = new ButtonGroup();
 			textPanel.setLayout(new GridLayout(1, 2));
 			textPanel.add(new JLabel("´úÂë"));
-			textPanel.add(codeInput = new JTextField(""));
+			textPanel.add(codeInput = new JTextField(code));
 			add(textPanel, BorderLayout.NORTH);
 			trueGroup.add(trueEast = new JRadioButton("¶«"));
 			trueGroup.add(trueWest = new JRadioButton("Î÷"));

@@ -67,6 +67,7 @@ public class MyArrow extends Shape{
 	}
 	@Override
 	public boolean containsN(Point2D p) {
+		/*
 		double x = p.getX();
 		double y = p.getY();
 		if(p1.getX() == p2.getX()&&p1.getX()-B<=x&&p1.getX()+B>=x&&
@@ -105,6 +106,7 @@ public class MyArrow extends Shape{
 		else if(p4 != null&&p4.getY() == p5.getY()&&p4.getY()-B<=y&&p4.getY()+B>=y&&
 				Math.min(p4.getX(), p5.getX())<x&&x<Math.max(p4.getX(), p5.getX()))
 			return true;
+			*/
 		return false;
 	}
 	@Override

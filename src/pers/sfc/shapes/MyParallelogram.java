@@ -27,6 +27,8 @@ import javax.swing.SwingUtilities;
 public class MyParallelogram extends Shape{
 	private Component parent;
 	private boolean InOut;//true:IN;  false:OUT;
+	private String type;
+	private String name;
 	public MyParallelogram(MyPoint p,double length,double width)
 	{
 		super.p = p;
@@ -240,6 +242,17 @@ public class MyParallelogram extends Shape{
 			panel.add(codeType = new JTextField(""));
 			panel.add(new JLabel("变量名"));
 			panel.add(codeInput = new JTextField(""));
+			if(func.equals(Func.OUT))
+			{
+				out.setSelected(true);
+				codeInput.setText(name);
+			}
+			else if(func.equals(Func.IN))
+			{
+				in.setSelected(true);
+				codeType.setText(type);
+				codeInput.setText(name);
+			}
 			add(panel, BorderLayout.CENTER);
 			//设置确定取消按钮
 			okButton = new JButton("Ok");
@@ -262,12 +275,15 @@ public class MyParallelogram extends Shape{
 			{
 				InOut = false;
 				func = Func.OUT;
+				name = codeInput.getText();
 				return codeInput.getText();
 			}
 			else
 			{
 				InOut = true;
 				func = Func.IN;
+				type = codeType.getText();
+				name = codeInput.getText();
 				return stringToLowerCase(codeType.getText())+" "+codeInput.getText();
 			}
 		}
