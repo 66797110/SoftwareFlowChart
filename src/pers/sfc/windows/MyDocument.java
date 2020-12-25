@@ -95,6 +95,14 @@ public class MyDocument {
 		list.remove(s);
 		list.add(0,now);
 	}
+	//将图形添加到链表尾
+	public void moveToEnd(Shape s)
+	{
+		if(s == null)
+			return;
+		list.remove(s);
+		list.add(s);
+	}
 	//删除图形
 	public void remove(Shape s)
 	{
@@ -103,7 +111,6 @@ public class MyDocument {
 		list.remove(s);
 	}
 	//更新链表
-	@SuppressWarnings("unchecked")
 	public void newList(ArrayList<?> list)
 	{
 		this.list = (ArrayList<Shape>)list;

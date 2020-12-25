@@ -30,12 +30,6 @@ public class MyFrame extends JFrame{
 	private MyDocument myDocument;
 	//输入输出
 	private MyFileInOut myFileInOut;
-	//运行
-	private CodeExecute codeExecute;
-	private ShapeExecute shapeExecute;
-	//生成
-	private CodeGenerate codeGenerate;
-	private ShapeGenerate shapeGenerate;
 	//画板
 	private MyComponent myComponent;
 	//菜单
@@ -67,12 +61,6 @@ public class MyFrame extends JFrame{
 		myDocument = new MyDocument();
 		//初始化输入输出
 		myFileInOut = new MyFileInOut();
-		//初始化代码运行
-		codeExecute = new CodeExecute();
-		shapeExecute = new ShapeExecute();
-		//初始化代码生成
-		codeGenerate = new CodeGenerate();
-		shapeGenerate = new ShapeGenerate();
 		//初始化菜单栏
 		bar = new JMenuBar();
 		//初始化文件菜单
@@ -118,8 +106,6 @@ public class MyFrame extends JFrame{
 		//将菜单栏和画板加入框架
 		setLayout(new BorderLayout());  
 		setJMenuBar(bar);
-		//add(myComponent);  
-		//setVisible(true);
 		//文件菜单栏监听
 		create.addActionListener(new ActionListener()
 		{
@@ -195,60 +181,70 @@ public class MyFrame extends JFrame{
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				var mrr = new MyRoundRectangle();
-				//mrr.setExecute(codeExecute);
-				myComponent.resetColor();
-				myDocument.update(mrr);
-				myComponent.update(myDocument);
-				repaint();  
+				if(myComponent!=null)
+				{
+					var mrr = new MyRoundRectangle();
+					myComponent.resetColor();
+					myDocument.update(mrr);
+					myComponent.update(myDocument);
+					repaint();  
+				}
 			}  
 		}); 
 		para.addActionListener(new ActionListener() 
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				var mp = new MyParallelogram();
-				//mp.setExecute(codeExecute);
-				myComponent.resetColor();
-				myDocument.update(mp);
-				myComponent.update(myDocument);
-				repaint();  
+				if(myComponent!=null)
+				{
+					var mp = new MyParallelogram();
+					myComponent.resetColor();
+					myDocument.update(mp);
+					myComponent.update(myDocument);
+					repaint();
+				}
 			}  
 		}); 
 		rect.addActionListener(new ActionListener() 
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				var mr = new MyRectangle();
-				//mr.setExecute(codeExecute);
-				myComponent.resetColor();
-				myDocument.update(mr);
-				myComponent.update(myDocument);
-				repaint();  
+				if(myComponent!=null)
+				{
+					var mr = new MyRectangle();
+					myComponent.resetColor();
+					myDocument.update(mr);
+					myComponent.update(myDocument);
+					repaint();  
+				}
 			}  
 		}); 
 		diam.addActionListener(new ActionListener() 
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				var md = new MyDiamond();
-				//md.setExecute(codeExecute);
-				myComponent.resetColor();
-				myDocument.update(md);
-				myComponent.update(myDocument);
-				repaint();  
+				if(myComponent!=null)
+				{
+					var md = new MyDiamond();
+					myComponent.resetColor();
+					myDocument.update(md);
+					myComponent.update(myDocument);
+					repaint();
+				}
 			}  
 		}); 
 		cir.addActionListener(new ActionListener() 
 		{  
 			public void actionPerformed(ActionEvent event) 
 			{
-				var mc = new MyCircle();
-				//mc.setExecute(codeExecute);
-				myComponent.resetColor();
-				myDocument.update(mc);
-				myComponent.update(myDocument);
-				repaint(); 
+				if(myComponent!=null)
+				{
+					var mc = new MyCircle();
+					myComponent.resetColor();
+					myDocument.update(mc);
+					myComponent.update(myDocument);
+					repaint(); 
+				}
 			}  
 		});
 		//代码菜单栏监听
@@ -256,8 +252,8 @@ public class MyFrame extends JFrame{
 		{
 			public void actionPerformed(ActionEvent event) 
 			{
-				codeExecute = new CodeExecute();
-				myDocument.setExecute(codeExecute);
+				var shapeExecute = new ShapeExecute();
+				myDocument.setExecute(new CodeExecute());
 				shapeExecute.setStartEnd(myComponent.getStart(), myComponent.getEnd());
 				shapeExecute.execute(myComponent,myDocument);
 			} 
@@ -266,8 +262,8 @@ public class MyFrame extends JFrame{
 		{
 			public void actionPerformed(ActionEvent event)
 			{
-				codeGenerate = new CodeGenerate();
-				myDocument.setGenerate(codeGenerate);
+				var shapeGenerate = new ShapeGenerate();
+				myDocument.setGenerate(new CodeGenerate());
 				shapeGenerate.setStartEnd(myComponent.getStart(), myComponent.getEnd());
 				shapeGenerate.setDoc(myDocument);
 				shapeGenerate.write();

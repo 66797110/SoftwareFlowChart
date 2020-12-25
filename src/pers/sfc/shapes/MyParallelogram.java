@@ -13,7 +13,6 @@ import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -237,17 +236,17 @@ public class MyParallelogram extends Shape{
 			bPanel.add(in);
 			bPanel.add(out);
 			add(bPanel,BorderLayout.NORTH);
-			panel.setLayout(new GridLayout(3, 3));
+			panel.setLayout(new GridLayout(2, 3));
 			panel.add(new JLabel("类型"));
 			panel.add(codeType = new JTextField(""));
 			panel.add(new JLabel("变量名"));
 			panel.add(codeInput = new JTextField(""));
-			if(func.equals(Func.OUT))
+			if(func!=null&&func.equals(Func.OUT))
 			{
 				out.setSelected(true);
 				codeInput.setText(name);
 			}
-			else if(func.equals(Func.IN))
+			else if(func!=null&&func.equals(Func.IN))
 			{
 				in.setSelected(true);
 				codeType.setText(type);

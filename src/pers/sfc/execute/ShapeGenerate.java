@@ -1,6 +1,5 @@
 package pers.sfc.execute;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,8 +14,8 @@ import pers.sfc.windows.MyDocument;
 
 public class ShapeGenerate {
 	private Shape start;
+	@SuppressWarnings("unused")
 	private Shape end;
-	private Shape current;
 	private String code;
 	private MyDocument myDocument;
 	public void setStart(Shape start)
@@ -72,14 +71,14 @@ public class ShapeGenerate {
 		code = "";
 		code = code+("import java.util.Scanner;\n \npublic class Main { \n"+String.join("", Collections.nCopies(startWidth, "	"))+"public static void main(String[] args) { \n");
 		startWidth++;
-		code = baseCodeGen(start.getNext(),startWidth,code);
+		code = baseCodeGen(start.getNext(myDocument),startWidth,code);
 		startWidth--;
 		code = code+String.join("", Collections.nCopies(startWidth, "	"))+"}\n}";
 	}
 	//分类生成函数
 	private String baseCodeGen(Shape current,int startWidth,String code)
 	{
-		for(;current!=null;current = current.getNext())
+		for(;current!=null;current = current.getNext(myDocument))
 		{
 			if(current.codeGen(startWidth).equals("end"))
 				return code;
@@ -92,53 +91,56 @@ public class ShapeGenerate {
 						myDocument.reset();
 						break;
 					}
+				continue;
 			}
 			if(current.getClass().getName().equals("pers.sfc.shapes.MyDiamond"))
 			{
-				if(((MyDiamond)current).equals(((MyDiamond)current).getTNext().getNext()))
+				if(((MyDiamond)current).equals(((MyDiamond)current).getTNext(myDocument).getNext(myDocument)))
 				{
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+
 							"while("+current.codeGen(startWidth)+") {\n";
 					startWidth++;
-					code = code+((MyDiamond)current).getTNext().codeGen(startWidth);
+					code = code+((MyDiamond)current).getTNext(myDocument).codeGen(startWidth);
 					startWidth--;
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+"} \n";
 					((MyDiamond)current).setJudge(0);
 					//current = ((MyDiamond)current).getFNext();
 					continue;
 				}
-				else if(((MyDiamond)current).equals(((MyDiamond)current).getFNext().getNext()))
+				else if(((MyDiamond)current).equals(((MyDiamond)current).getFNext(myDocument).getNext(myDocument)))
 				{
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+
 							"while(!("+current.codeGen(startWidth)+")) {\n";
 					startWidth++;
-					code = code+((MyDiamond)current).getFNext().codeGen(startWidth);
+					code = code+((MyDiamond)current).getFNext(myDocument).codeGen(startWidth);
 					startWidth--;
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+"} \n";
 					((MyDiamond)current).setJudge(1);
 					//current = ((MyDiamond)current).getTNext();
 					continue;
 				}
-				else if(((MyDiamond)current).getTNext().getNext().equals(((MyDiamond)current).getFNext().getNext()))
+				else if(((MyDiamond)current).getTNext(myDocument).getNext(myDocument)!=null&&
+						((MyDiamond)current).getFNext(myDocument).getNext(myDocument)!=null&&
+						((MyDiamond)current).getTNext(myDocument).getNext(myDocument).equals(((MyDiamond)current).getFNext(myDocument).getNext(myDocument)))
 				{
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+
 							"if("+current.codeGen(startWidth)+") {\n";
 					startWidth++;
-					code = code+((MyDiamond)current).getTNext().codeGen(startWidth);
+					code = code+((MyDiamond)current).getTNext(myDocument).codeGen(startWidth);
 					startWidth--;
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+"} \n";
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+"else {\n";
 					startWidth++;
-					code = code+((MyDiamond)current).getTNext().codeGen(startWidth);
+					code = code+((MyDiamond)current).getFNext(myDocument).codeGen(startWidth);
 					startWidth--;
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+"} \n";
-					current = ((MyDiamond)current).getTNext();
+					current = ((MyDiamond)current).getTNext(myDocument);
 					continue;
 				}
 				else
 				{
-					Shape tCurrent = ((MyDiamond)current).getTNext();
-					Shape fCurrent = ((MyDiamond)current).getFNext();
+					Shape tCurrent = ((MyDiamond)current).getTNext(myDocument);
+					Shape fCurrent = ((MyDiamond)current).getFNext(myDocument);
 					code = code+String.join("", Collections.nCopies(startWidth, "	"))+
 							"if("+current.codeGen(startWidth)+") {\n";
 					startWidth++;

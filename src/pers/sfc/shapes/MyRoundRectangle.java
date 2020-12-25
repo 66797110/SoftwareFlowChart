@@ -19,7 +19,7 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 
 public class MyRoundRectangle extends Shape{
-	MyArrow arrow;
+	//¹¹Ôìº¯Êý
 	public MyRoundRectangle(MyPoint p,double length,double width)
 	{
 		super.p = p;
@@ -36,7 +36,6 @@ public class MyRoundRectangle extends Shape{
 	{
 		this(new MyPoint(),125,75);
 	}
-
 	@Override
 	public boolean containsN(Point2D p) {
 		double x = p.getX();

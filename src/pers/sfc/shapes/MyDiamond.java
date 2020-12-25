@@ -19,27 +19,17 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import pers.sfc.windows.MyDocument;
+
 public class MyDiamond extends Shape{
-	private MyArrow arrow1;
-	private MyArrow arrow2;
-	private Position pos1;
-	private Position pos2;
 	private Position truePos;
 	private Position falsePos;
-	private MyArrow trueArrow;
-	private MyArrow falseArrow;
 	private int Judge;
 	public MyDiamond(MyPoint p,double length,double width)
 	{
 		super.p = p;
 		super.length = length;
 		super.width = width;
-		this.arrow1 = null;
-		this.arrow2 = null;
-		this.pos1 = null;
-		this.pos2 = null;
-		this.trueArrow = null;
-		this.falseArrow = null;
 		super.func = Func.JUDGE;
 		this.Judge = -1;
 	}
@@ -85,31 +75,37 @@ public class MyDiamond extends Shape{
 	}
 
 	//获得下一个图形
-	public Shape getNext()
+	public Shape getNext(MyDocument myDocument)
 	{
 		if(Judge == 1)
-			return getTNext();
+			return getTNext(myDocument);
 		else if(Judge == 0)
-			return getFNext();
+			return getFNext(myDocument);
 		else
 			return null;
 	}
 	//获得下一个正确图形
-	public Shape getTNext()
+	public Shape getTNext(MyDocument myDocument)
 	{
+		if(truePos == null)
+			return null;
 		if(nJudge&&nFunc&&truePos.equals(Position.NORTH)) {
+			myDocument.moveToEnd(nArrow);
 			nArrow.setColorOn(Color.RED);
 			return this.nArrow.getEnd();
 		}
 		else if(wJudge&&wFunc&&truePos.equals(Position.WEST)) {
+			myDocument.moveToEnd(wArrow);
 			wArrow.setColorOn(Color.RED);
 			return this.wArrow.getEnd();
 		}
 		else if(sJudge&&sFunc&&truePos.equals(Position.SOUTH)) {
+			myDocument.moveToEnd(sArrow);
 			sArrow.setColorOn(Color.RED);
 			return this.sArrow.getEnd();
 		}
 		else if(eJudge&&eFunc&&truePos.equals(Position.EAST)) {
+			myDocument.moveToEnd(eArrow);
 			eArrow.setColorOn(Color.RED);
 			return this.eArrow.getEnd();
 		}
@@ -117,21 +113,27 @@ public class MyDiamond extends Shape{
 			return null;
 	}
 	//获得下一个错误图形
-	public Shape getFNext()
+	public Shape getFNext(MyDocument myDocument)
 	{
+		if(falsePos == null)
+			return null;
 		if(nJudge&&nFunc&&falsePos.equals(Position.NORTH)) {
+			myDocument.moveToEnd(nArrow);
 			nArrow.setColorOn(Color.RED);
 			return this.nArrow.getEnd();
 		}
 		else if(wJudge&&wFunc&&falsePos.equals(Position.WEST)) {
+			myDocument.moveToEnd(wArrow);
 			wArrow.setColorOn(Color.RED);
 			return this.wArrow.getEnd();
 		}
 		else if(sJudge&&sFunc&&falsePos.equals(Position.SOUTH)) {
+			myDocument.moveToEnd(sArrow);
 			sArrow.setColorOn(Color.RED);
 			return this.sArrow.getEnd();
 		}
 		else if(eJudge&&eFunc&&falsePos.equals(Position.EAST)) {
+			myDocument.moveToEnd(eArrow);
 			eArrow.setColorOn(Color.RED);
 			return this.eArrow.getEnd();
 		}
@@ -240,7 +242,7 @@ public class MyDiamond extends Shape{
 	//设置出口条件
 	public void setJudge(int judge)
 	{
-		this.Judge = -1;
+		this.Judge = judge;
 	}
 	//私有窗口类
 	private class MyDialog extends JPanel
@@ -278,10 +280,26 @@ public class MyDiamond extends Shape{
 			trueGroup.add(trueWest = new JRadioButton("西"));
 			trueGroup.add(trueSouth = new JRadioButton("南"));
 			trueGroup.add(trueNorth = new JRadioButton("北"));
+			if(truePos!=null&&truePos.equals(Position.NORTH))
+				trueNorth.setSelected(true);
+			else if(truePos!=null&&truePos.equals(Position.WEST))
+				trueWest.setSelected(true);
+			else if(truePos!=null&&truePos.equals(Position.SOUTH))
+				trueSouth.setSelected(true);
+			else if(truePos!=null&&truePos.equals(Position.EAST))
+				trueEast.setSelected(true);
 			falseGroup.add(falseEast = new JRadioButton("东"));
 			falseGroup.add(falseWest = new JRadioButton("西"));
 			falseGroup.add(falseSouth = new JRadioButton("南"));
 			falseGroup.add(falseNorth = new JRadioButton("北"));
+			if(falsePos!=null&&falsePos.equals(Position.NORTH))
+				falseNorth.setSelected(true);
+			else if(falsePos!=null&&falsePos.equals(Position.WEST))
+				falseWest.setSelected(true);
+			else if(falsePos!=null&&falsePos.equals(Position.SOUTH))
+				falseSouth.setSelected(true);
+			else if(falsePos!=null&&falsePos.equals(Position.EAST))
+				falseEast.setSelected(true);
 			rbPanel.setLayout(new GridLayout(2, 5));
 			rbPanel.add(new JLabel("正确出口"));
 			rbPanel.add(trueEast);

@@ -192,7 +192,7 @@ public class CodeExecute{
 	public int codeExecution(MyDiamond diamond)
 	{
 		Double num1 = Double.NaN;
-		Double num2 = Double.NaN;
+ 		Double num2 = Double.NaN;
 		String op = null;
 		code = diamond.getCode();
 		char[] ch = code.toCharArray();
@@ -275,9 +275,9 @@ public class CodeExecute{
 			case(">="):
 				if(num1>=num2)return 1;else return 0;
 			case("=="):
-				if(num1==num2)return 1;else return 0;
+				if(num1.equals(num2))return 1;else return 0;
 			case("!="):
-				if(num1!=num2)return 1;else return 0;
+				if(!num1.equals(num2))return 1;else return 0;
 			}
 		else
 			if(num1 == 1)return 1;else return 0;

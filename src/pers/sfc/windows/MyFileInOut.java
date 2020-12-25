@@ -10,22 +10,20 @@ import javax.swing.JOptionPane;
 import pers.sfc.shapes.Shape;
 
 public class MyFileInOut {
-	//链表
-	//private ArrayList list;
 	//打开的文件名
-	private String FileName;
+	private String fileName;
 	//序列化对象
-	private MyIOStream oios;
+	private MyIOStream mios;
 	
 	public MyFileInOut()
 	{
-		FileName = null;
-		oios = new MyIOStream();
+		fileName = null;
+		mios = new MyIOStream();
 	}
-	//重置FileName
+	//重置fileName
 	public void reFileName()
 	{
-		FileName = null;
+		fileName = null;
 	}
 	//打开文件
 	public ArrayList<?> open() throws ClassNotFoundException, IOException
@@ -36,9 +34,9 @@ public class MyFileInOut {
 		fc.setDialogTitle("打开文件");//标题
 		//fc.setSelectedFile(new File("test.xml"));//默认文件名
 		fc.showOpenDialog(null);
-		FileName = fc.getSelectedFile().getAbsolutePath();
-		if(FileName.endsWith(".xml")) {
-			list = oios.objectInput(FileName);
+		fileName = fc.getSelectedFile().getAbsolutePath();
+		if(fileName.endsWith(".xml")) {
+			list = mios.objectInput(fileName);
 			return list;
 		}
 		JOptionPane.showMessageDialog(null, "打开文件类型错误", "错误", JOptionPane.ERROR_MESSAGE);
@@ -48,9 +46,9 @@ public class MyFileInOut {
 	//存储文件
 	public void save(ArrayList<Shape> list) throws IOException
 	{
-		if(FileName != null)
+		if(fileName != null)
 		{
-			oios.objectOutput(list,FileName);
+			mios.objectOutput(list,fileName);
 			return;
 		}
 		else
@@ -60,10 +58,10 @@ public class MyFileInOut {
 			fc.setDialogTitle("保存文件");//标题
 			fc.setSelectedFile(new File("test.xml"));//默认文件名
 			fc.showSaveDialog(null);
-			FileName = fc.getSelectedFile().getAbsolutePath();//获得稳健绝对路径
-			if(FileName.endsWith(".xml"))
+			fileName = fc.getSelectedFile().getAbsolutePath();//获得稳健绝对路径
+			if(fileName.endsWith(".xml"))
 			{
-				oios.objectOutput(list,FileName);
+				mios.objectOutput(list,fileName);
 				return;
 			}
 			JOptionPane.showMessageDialog(null, "请使用xml类型进行保存", "错误", JOptionPane.ERROR_MESSAGE);
@@ -79,10 +77,10 @@ public class MyFileInOut {
 		fc.setDialogTitle("保存文件");//标题
 		fc.setSelectedFile(new File("test.xml"));//默认文件名
 		fc.showSaveDialog(null);
-		FileName = fc.getSelectedFile().getAbsolutePath();//获得稳健绝对路径
-		if(FileName.endsWith(".xml"))
+		fileName = fc.getSelectedFile().getAbsolutePath();//获得稳健绝对路径
+		if(fileName.endsWith(".xml"))
 		{
-			oios.objectOutput(list,FileName);
+			mios.objectOutput(list,fileName);
 			return;
 		}
 		JOptionPane.showMessageDialog(null, "请使用xml类型进行保存", "错误", JOptionPane.ERROR_MESSAGE);
@@ -90,6 +88,6 @@ public class MyFileInOut {
 	
 	public void clean()
 	{
-		FileName = null;
+		fileName = null;
 	}
 }

@@ -13,7 +13,6 @@ import javax.swing.JComponent;
 
 import pers.sfc.shapes.Func;
 import pers.sfc.shapes.MyArrow;
-import pers.sfc.shapes.NormalState;
 import pers.sfc.shapes.Position;
 import pers.sfc.shapes.SelectState;
 import pers.sfc.shapes.SelectedState;
@@ -34,8 +33,6 @@ public class MyComponent extends JComponent{
 	private Shape startShape;
 	private Shape endShape;
 	private double x,y;
-	//private MyPoint start;
-	//private MyPoint end;
 	private Position startP;//起点连接位置
 	private Position endP;//终点连接位置
 
@@ -143,6 +140,8 @@ public class MyComponent extends JComponent{
 				{
 					startP = current.clickedPoint(event.getPoint());
 					startShape = current;//保存起点图形对象
+					if(last != null && !last.equals(current))
+						last.backState();
 					//start = current.getPoint(startP);
 					current.setState(new SelectedState(startP));
 				}
@@ -196,7 +195,8 @@ public class MyComponent extends JComponent{
 				setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				state = -1;
 			}
-			else if(myDocument.findIn(event.getPoint()) != null)
+			else if(myDocument.findIn(event.getPoint()) != null&&
+					!myDocument.findIn(event.getPoint()).getClass().getName().equals("pers.sfc.shapes.MyArrow"))
 			{
 				setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 				state = 0;

@@ -11,16 +11,16 @@ import java.awt.geom.Point2D;
 public class MyArrow extends Shape{
 	private double H = 10; // 箭头高度
 	private double L = 5; // 底边的一半
-	private MyPoint p1;
-	private MyPoint p2;
-	private MyPoint p3;
-	private MyPoint p4;
-	private MyPoint p5;
-	private MyPoint p6;
-	private Shape start;
-	private Shape end;
-	private Position startP;
-	private Position endP;
+	private MyPoint p1;//起点
+	private MyPoint p2;//拐点
+	private MyPoint p3;//拐点
+	private MyPoint p4;//拐点
+	private MyPoint p5;//拐点
+	private MyPoint p6;//终点
+	private Shape start;//起点图元
+	private Shape end;//终点图元
+	private Position startP;//起点方位
+	private Position endP;//终点方位
 	public MyArrow(Shape start,Shape end,Position startP,Position endP)
 	{
 		this.start = start;
@@ -109,6 +109,16 @@ public class MyArrow extends Shape{
 			*/
 		return false;
 	}
+	public Position clickedPoint(Point2D pIn)
+	{
+		return Position.NONE;
+	}
+	public int onCorner(Point2D pIn) 
+	{
+		return 0;
+	}
+	public void connectPoint(Graphics2D g) {}
+	public void Offset(double cx,double cy) {}
 	@Override
 	public void drawEntity(Graphics2D g) {
 		if(color != null&&color.equals(Color.RED))

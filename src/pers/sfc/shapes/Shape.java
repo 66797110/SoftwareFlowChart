@@ -12,8 +12,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.swing.JTextField;
-
 import pers.sfc.execute.CodeExecute;
 import pers.sfc.execute.CodeGenerate;
 import pers.sfc.windows.MyDocument;
@@ -25,10 +23,9 @@ abstract public class Shape {
 	protected MyPoint p; //左上角定位
 	protected double length; //长
 	protected double width; //宽
-	protected State state = new NormalState();
-	protected State lstate;
-	protected String code = "";
-	protected JTextField textField;
+	protected State state = new NormalState();//图元状态
+	protected State lstate;//图元上次处于的状态
+	protected String code = "";//代码
 	protected CodeExecute execute;//代码运行
 	protected CodeGenerate generate;//代码生成
 	protected MyArrow nArrow,wArrow,sArrow,eArrow;//东西南北点持有箭头
@@ -40,9 +37,8 @@ abstract public class Shape {
 	protected int asStart = 0,
 			asEnd = 0;//作为开始和结束图形的数量
 	//protected MyArrow outArrow;
-	protected Func func;
-	//颜色设置
-	protected Color color = Color.BLACK;
+	protected Func func;//图元功能
+	protected Color color = Color.BLACK;//颜色设置
 	//鼠标是否在图形内普通情况
 	abstract public boolean containsN(Point2D p);
 	//鼠标是否在图形内
@@ -295,21 +291,25 @@ abstract public class Shape {
 		}
 	}
 	//获得下一个图形
-	public Shape getNext()
+	public Shape getNext(MyDocument myDocument)
 	{
 		if(nJudge&&nFunc) {
+			myDocument.moveToEnd(nArrow);
 			nArrow.setColorOn(Color.RED);
 			return this.nArrow.getEnd();
 		}
 		else if(wJudge&&wFunc) {
+			myDocument.moveToEnd(wArrow);
 			wArrow.setColorOn(Color.RED);
 			return this.wArrow.getEnd();
 		}
 		else if(sJudge&&sFunc) {
+			myDocument.moveToEnd(sArrow);
 			sArrow.setColorOn(Color.RED);
 			return this.sArrow.getEnd();
 		}
 		else if(eJudge&&eFunc) {
+			myDocument.moveToEnd(eArrow);
 			eArrow.setColorOn(Color.RED);
 			return this.eArrow.getEnd();
 		}

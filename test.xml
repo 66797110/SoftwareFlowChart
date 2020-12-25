@@ -1,1 +1,576 @@
-<list/>
+<list>
+  <pers.sfc.shapes.MyDiamond>
+    <p>
+      <x>276.0</x>
+      <y>271.0</y>
+    </p>
+    <length>125.0</length>
+    <width>75.0</width>
+    <state class="pers.sfc.shapes.NormalState"/>
+    <lstate class="pers.sfc.shapes.NormalState" reference="../state"/>
+    <code>A==1</code>
+    <execute>
+      <code>A==1</code>
+      <list>
+        <pers.sfc.execute.Variable>
+          <name>A</name>
+          <type>INT</type>
+          <var>1.0</var>
+        </pers.sfc.execute.Variable>
+      </list>
+    </execute>
+    <nArrow>
+      <length>0.0</length>
+      <width>0.0</width>
+      <state class="pers.sfc.shapes.NormalState"/>
+      <code></code>
+      <execute reference="../../execute"/>
+      <nFunc>false</nFunc>
+      <wFunc>false</wFunc>
+      <sFunc>false</sFunc>
+      <eFunc>false</eFunc>
+      <nJudge>false</nJudge>
+      <wJudge>false</wJudge>
+      <sJudge>false</sJudge>
+      <eJudge>false</eJudge>
+      <asStart>0</asStart>
+      <asEnd>0</asEnd>
+      <func>ARROW</func>
+      <color>
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+        <alpha>255</alpha>
+      </color>
+      <H>10.0</H>
+      <L>5.0</L>
+      <p1>
+        <x>338.5</x>
+        <y>225.0</y>
+      </p1>
+      <p2>
+        <x>338.5</x>
+        <y>248.0</y>
+      </p2>
+      <p5>
+        <x>338.5</x>
+        <y>248.0</y>
+      </p5>
+      <p6>
+        <x>338.5</x>
+        <y>271.0</y>
+      </p6>
+      <start class="pers.sfc.shapes.MyRectangle">
+        <p>
+          <x>276.0</x>
+          <y>150.0</y>
+        </p>
+        <length>125.0</length>
+        <width>75.0</width>
+        <state class="pers.sfc.shapes.NormalState"/>
+        <lstate class="pers.sfc.shapes.NormalState" reference="../state"/>
+        <code>int A = 1;</code>
+        <execute reference="../../../execute"/>
+        <nArrow>
+          <length>0.0</length>
+          <width>0.0</width>
+          <state class="pers.sfc.shapes.NormalState"/>
+          <code></code>
+          <execute reference="../../../../execute"/>
+          <nFunc>false</nFunc>
+          <wFunc>false</wFunc>
+          <sFunc>false</sFunc>
+          <eFunc>false</eFunc>
+          <nJudge>false</nJudge>
+          <wJudge>false</wJudge>
+          <sJudge>false</sJudge>
+          <eJudge>false</eJudge>
+          <asStart>0</asStart>
+          <asEnd>0</asEnd>
+          <func>ARROW</func>
+          <color reference="../../../color"/>
+          <H>10.0</H>
+          <L>5.0</L>
+          <p1>
+            <x>338.5</x>
+            <y>101.0</y>
+          </p1>
+          <p2>
+            <x>338.5</x>
+            <y>125.5</y>
+          </p2>
+          <p5>
+            <x>338.5</x>
+            <y>125.5</y>
+          </p5>
+          <p6>
+            <x>338.5</x>
+            <y>150.0</y>
+          </p6>
+          <start class="pers.sfc.shapes.MyRoundRectangle">
+            <p>
+              <x>276.0</x>
+              <y>26.0</y>
+            </p>
+            <length>125.0</length>
+            <width>75.0</width>
+            <state class="pers.sfc.shapes.NormalState"/>
+            <lstate class="pers.sfc.shapes.NormalState" reference="../state"/>
+            <code>start</code>
+            <execute reference="../../../../../execute"/>
+            <sArrow reference="../.."/>
+            <nFunc>false</nFunc>
+            <wFunc>false</wFunc>
+            <sFunc>true</sFunc>
+            <eFunc>false</eFunc>
+            <nJudge>false</nJudge>
+            <wJudge>false</wJudge>
+            <sJudge>true</sJudge>
+            <eJudge>false</eJudge>
+            <asStart>1</asStart>
+            <asEnd>0</asEnd>
+            <func>START</func>
+            <color reference="../../../../color"/>
+          </start>
+          <end class="pers.sfc.shapes.MyRectangle" reference="../.."/>
+          <startP>SOUTH</startP>
+          <endP>NORTH</endP>
+        </nArrow>
+        <sArrow reference="../.."/>
+        <nFunc>false</nFunc>
+        <wFunc>false</wFunc>
+        <sFunc>true</sFunc>
+        <eFunc>false</eFunc>
+        <nJudge>true</nJudge>
+        <wJudge>false</wJudge>
+        <sJudge>true</sJudge>
+        <eJudge>false</eJudge>
+        <asStart>1</asStart>
+        <asEnd>1</asEnd>
+        <func>OPERATE</func>
+        <color reference="../../color"/>
+      </start>
+      <end class="pers.sfc.shapes.MyDiamond" reference="../.."/>
+      <startP>SOUTH</startP>
+      <endP>NORTH</endP>
+    </nArrow>
+    <wArrow>
+      <length>0.0</length>
+      <width>0.0</width>
+      <state class="pers.sfc.shapes.NormalState"/>
+      <code></code>
+      <execute reference="../../execute"/>
+      <nFunc>false</nFunc>
+      <wFunc>false</wFunc>
+      <sFunc>false</sFunc>
+      <eFunc>false</eFunc>
+      <nJudge>false</nJudge>
+      <wJudge>false</wJudge>
+      <sJudge>false</sJudge>
+      <eJudge>false</eJudge>
+      <asStart>0</asStart>
+      <asEnd>0</asEnd>
+      <func>ARROW</func>
+      <color reference="../../nArrow/color"/>
+      <H>10.0</H>
+      <L>5.0</L>
+      <p1>
+        <x>276.0</x>
+        <y>308.5</y>
+      </p1>
+      <p2>
+        <x>186.5</x>
+        <y>308.5</y>
+      </p2>
+      <p5>
+        <x>186.5</x>
+        <y>308.5</y>
+      </p5>
+      <p6>
+        <x>186.5</x>
+        <y>368.0</y>
+      </p6>
+      <start class="pers.sfc.shapes.MyDiamond" reference="../.."/>
+      <end class="pers.sfc.shapes.MyRectangle">
+        <p>
+          <x>124.0</x>
+          <y>368.0</y>
+        </p>
+        <length>125.0</length>
+        <width>75.0</width>
+        <state class="pers.sfc.shapes.NormalState"/>
+        <lstate class="pers.sfc.shapes.SelectState"/>
+        <code>A = 1;</code>
+        <execute reference="../../../execute"/>
+        <nArrow reference="../.."/>
+        <sArrow>
+          <length>0.0</length>
+          <width>0.0</width>
+          <state class="pers.sfc.shapes.NormalState"/>
+          <code></code>
+          <execute reference="../../../../execute"/>
+          <nFunc>false</nFunc>
+          <wFunc>false</wFunc>
+          <sFunc>false</sFunc>
+          <eFunc>false</eFunc>
+          <nJudge>false</nJudge>
+          <wJudge>false</wJudge>
+          <sJudge>false</sJudge>
+          <eJudge>false</eJudge>
+          <asStart>0</asStart>
+          <asEnd>0</asEnd>
+          <func>ARROW</func>
+          <color reference="../../../../nArrow/color"/>
+          <H>10.0</H>
+          <L>5.0</L>
+          <p1>
+            <x>186.5</x>
+            <y>443.0</y>
+          </p1>
+          <p2>
+            <x>186.5</x>
+            <y>477.0</y>
+          </p2>
+          <p5>
+            <x>359.5</x>
+            <y>477.0</y>
+          </p5>
+          <p6>
+            <x>359.5</x>
+            <y>511.0</y>
+          </p6>
+          <start class="pers.sfc.shapes.MyRectangle" reference="../.."/>
+          <end class="pers.sfc.shapes.MyParallelogram">
+            <p>
+              <x>297.0</x>
+              <y>511.0</y>
+            </p>
+            <length>125.0</length>
+            <width>75.0</width>
+            <state class="pers.sfc.shapes.NormalState"/>
+            <lstate class="pers.sfc.shapes.SelectState"/>
+            <code>A</code>
+            <execute reference="../../../../../execute"/>
+            <nArrow>
+              <length>0.0</length>
+              <width>0.0</width>
+              <state class="pers.sfc.shapes.NormalState"/>
+              <code></code>
+              <execute reference="../../../../../../execute"/>
+              <nFunc>false</nFunc>
+              <wFunc>false</wFunc>
+              <sFunc>false</sFunc>
+              <eFunc>false</eFunc>
+              <nJudge>false</nJudge>
+              <wJudge>false</wJudge>
+              <sJudge>false</sJudge>
+              <eJudge>false</eJudge>
+              <asStart>0</asStart>
+              <asEnd>0</asEnd>
+              <func>ARROW</func>
+              <color reference="../../../../../../nArrow/color"/>
+              <H>10.0</H>
+              <L>5.0</L>
+              <p1>
+                <x>512.5</x>
+                <y>444.0</y>
+              </p1>
+              <p2>
+                <x>512.5</x>
+                <y>477.5</y>
+              </p2>
+              <p5>
+                <x>359.5</x>
+                <y>477.5</y>
+              </p5>
+              <p6>
+                <x>359.5</x>
+                <y>511.0</y>
+              </p6>
+              <start class="pers.sfc.shapes.MyRectangle">
+                <p>
+                  <x>450.0</x>
+                  <y>369.0</y>
+                </p>
+                <length>125.0</length>
+                <width>75.0</width>
+                <state class="pers.sfc.shapes.NormalState"/>
+                <lstate class="pers.sfc.shapes.NormalState" reference="../state"/>
+                <code>A = -1;</code>
+                <execute reference="../../../../../../../execute"/>
+                <nArrow>
+                  <length>0.0</length>
+                  <width>0.0</width>
+                  <state class="pers.sfc.shapes.NormalState"/>
+                  <code></code>
+                  <execute reference="../../../../../../../../execute"/>
+                  <nFunc>false</nFunc>
+                  <wFunc>false</wFunc>
+                  <sFunc>false</sFunc>
+                  <eFunc>false</eFunc>
+                  <nJudge>false</nJudge>
+                  <wJudge>false</wJudge>
+                  <sJudge>false</sJudge>
+                  <eJudge>false</eJudge>
+                  <asStart>0</asStart>
+                  <asEnd>0</asEnd>
+                  <func>ARROW</func>
+                  <color reference="../../../../../../../../nArrow/color"/>
+                  <H>10.0</H>
+                  <L>5.0</L>
+                  <p1>
+                    <x>401.0</x>
+                    <y>308.5</y>
+                  </p1>
+                  <p2>
+                    <x>512.5</x>
+                    <y>308.5</y>
+                  </p2>
+                  <p5>
+                    <x>512.5</x>
+                    <y>308.5</y>
+                  </p5>
+                  <p6>
+                    <x>512.5</x>
+                    <y>369.0</y>
+                  </p6>
+                  <start class="pers.sfc.shapes.MyDiamond" reference="../../../../../../../.."/>
+                  <end class="pers.sfc.shapes.MyRectangle" reference="../.."/>
+                  <startP>EAST</startP>
+                  <endP>NORTH</endP>
+                </nArrow>
+                <sArrow reference="../.."/>
+                <nFunc>false</nFunc>
+                <wFunc>false</wFunc>
+                <sFunc>true</sFunc>
+                <eFunc>false</eFunc>
+                <nJudge>true</nJudge>
+                <wJudge>false</wJudge>
+                <sJudge>true</sJudge>
+                <eJudge>false</eJudge>
+                <asStart>1</asStart>
+                <asEnd>1</asEnd>
+                <func>OPERATE</func>
+                <color reference="../../../../../../../nArrow/color"/>
+              </start>
+              <end class="pers.sfc.shapes.MyParallelogram" reference="../.."/>
+              <startP>SOUTH</startP>
+              <endP>NORTH</endP>
+            </nArrow>
+            <sArrow>
+              <length>0.0</length>
+              <width>0.0</width>
+              <state class="pers.sfc.shapes.NormalState"/>
+              <code></code>
+              <execute reference="../../../../../../execute"/>
+              <nFunc>false</nFunc>
+              <wFunc>false</wFunc>
+              <sFunc>false</sFunc>
+              <eFunc>false</eFunc>
+              <nJudge>false</nJudge>
+              <wJudge>false</wJudge>
+              <sJudge>false</sJudge>
+              <eJudge>false</eJudge>
+              <asStart>0</asStart>
+              <asEnd>0</asEnd>
+              <func>ARROW</func>
+              <color reference="../../../../../../nArrow/color"/>
+              <H>10.0</H>
+              <L>5.0</L>
+              <p1>
+                <x>359.5</x>
+                <y>586.0</y>
+              </p1>
+              <p2>
+                <x>359.5</x>
+                <y>613.0</y>
+              </p2>
+              <p5>
+                <x>359.5</x>
+                <y>613.0</y>
+              </p5>
+              <p6>
+                <x>359.5</x>
+                <y>640.0</y>
+              </p6>
+              <start class="pers.sfc.shapes.MyParallelogram" reference="../.."/>
+              <end class="pers.sfc.shapes.MyRoundRectangle">
+                <p>
+                  <x>297.0</x>
+                  <y>640.0</y>
+                </p>
+                <length>125.0</length>
+                <width>75.0</width>
+                <state class="pers.sfc.shapes.NormalState"/>
+                <lstate class="pers.sfc.shapes.NormalState" reference="../state"/>
+                <code>end</code>
+                <execute reference="../../../../../../../execute"/>
+                <nArrow reference="../.."/>
+                <nFunc>false</nFunc>
+                <wFunc>false</wFunc>
+                <sFunc>false</sFunc>
+                <eFunc>false</eFunc>
+                <nJudge>true</nJudge>
+                <wJudge>false</wJudge>
+                <sJudge>false</sJudge>
+                <eJudge>false</eJudge>
+                <asStart>0</asStart>
+                <asEnd>2</asEnd>
+                <func>END</func>
+                <color reference="../../../../../../../nArrow/color"/>
+              </end>
+              <startP>SOUTH</startP>
+              <endP>NORTH</endP>
+            </sArrow>
+            <nFunc>false</nFunc>
+            <wFunc>false</wFunc>
+            <sFunc>true</sFunc>
+            <eFunc>false</eFunc>
+            <nJudge>true</nJudge>
+            <wJudge>false</wJudge>
+            <sJudge>true</sJudge>
+            <eJudge>false</eJudge>
+            <asStart>1</asStart>
+            <asEnd>2</asEnd>
+            <func>OUT</func>
+            <color reference="../../../../../nArrow/color"/>
+            <parent class="pers.sfc.windows.MyComponent" serialization="custom">
+              <java.awt.Component>
+                <default>
+                  <autoFocusTransferOnDisposal>true</autoFocusTransferOnDisposal>
+                  <boundsOp>3</boundsOp>
+                  <componentSerializedDataVersion>4</componentSerializedDataVersion>
+                  <enabled>true</enabled>
+                  <eventMask>4104</eventMask>
+                  <focusTraversalKeysEnabled>true</focusTraversalKeysEnabled>
+                  <focusable>true</focusable>
+                  <height>738</height>
+                  <ignoreRepaint>false</ignoreRepaint>
+                  <isFocusTraversableOverridden>0</isFocusTraversableOverridden>
+                  <isPacked>false</isPacked>
+                  <maxSizeSet>false</maxSizeSet>
+                  <minSizeSet>false</minSizeSet>
+                  <nameExplicitlySet>false</nameExplicitlySet>
+                  <newEventsOnly>true</newEventsOnly>
+                  <prefSizeSet>false</prefSizeSet>
+                  <valid>true</valid>
+                  <visible>true</visible>
+                  <width>786</width>
+                  <x>0</x>
+                  <y>0</y>
+                  <cursor>
+                    <type>0</type>
+                    <name>Ä¬ÈÏ¹â±ê</name>
+                  </cursor>
+                  <locale>zh_CN</locale>
+                  <peerFont class="javax.swing.plaf.FontUIResource">
+                    <size class="null"/>
+                    <posture class="null"/>
+                    <weight class="null"/>
+                    <superscript class="null"/>
+                    <family class="string">Dialog</family>
+                    <width class="null"/>
+                    <transform class="null"/>
+                    <tracking class="null"/>
+                  </peerFont>
+                </default>
+                <null/>
+                <java.awt.ComponentOrientation>
+                  <orientation>7</orientation>
+                </java.awt.ComponentOrientation>
+                <null/>
+                <null/>
+              </java.awt.Component>
+              <java.awt.Container>
+                <default>
+                  <ncomponents>0</ncomponents>
+                  <component/>
+                  <focusCycleRoot>false</focusCycleRoot>
+                  <containerSerializedDataVersion>1</containerSerializedDataVersion>
+                  <focusTraversalPolicyProvider>false</focusTraversalPolicyProvider>
+                </default>
+                <null/>
+                <null/>
+              </java.awt.Container>
+              <javax.swing.JComponent>
+                <default>
+                  <alignmentX>0.0</alignmentX>
+                  <alignmentY>0.0</alignmentY>
+                  <autoscrolls>false</autoscrolls>
+                  <flags>16384</flags>
+                  <isAlignmentXSet>false</isAlignmentXSet>
+                  <isAlignmentYSet>false</isAlignmentYSet>
+                  <verifyInputWhenFocusTarget>true</verifyInputWhenFocusTarget>
+                  <listenerList serialization="custom">
+                    <javax.swing.event.EventListenerList>
+                      <default/>
+                      <null/>
+                    </javax.swing.event.EventListenerList>
+                  </listenerList>
+                </default>
+                <int>0</int>
+              </javax.swing.JComponent>
+              <pers.sfc.windows.MyComponent>
+                <default>
+                  <x>602.0</x>
+                  <y>132.0</y>
+                  <myDocument>
+                    <list reference="../../../../../../../../../.."/>
+                    <i>0</i>
+                  </myDocument>
+                </default>
+              </pers.sfc.windows.MyComponent>
+            </parent>
+            <InOut>false</InOut>
+            <name>A</name>
+          </end>
+          <startP>SOUTH</startP>
+          <endP>NORTH</endP>
+        </sArrow>
+        <nFunc>false</nFunc>
+        <wFunc>false</wFunc>
+        <sFunc>true</sFunc>
+        <eFunc>false</eFunc>
+        <nJudge>true</nJudge>
+        <wJudge>false</wJudge>
+        <sJudge>true</sJudge>
+        <eJudge>false</eJudge>
+        <asStart>1</asStart>
+        <asEnd>1</asEnd>
+        <func>OPERATE</func>
+        <color reference="../../../nArrow/color"/>
+      </end>
+      <startP>WEST</startP>
+      <endP>NORTH</endP>
+    </wArrow>
+    <eArrow reference="../wArrow/end/sArrow/end/nArrow/start/nArrow"/>
+    <nFunc>false</nFunc>
+    <wFunc>true</wFunc>
+    <sFunc>false</sFunc>
+    <eFunc>true</eFunc>
+    <nJudge>true</nJudge>
+    <wJudge>true</wJudge>
+    <sJudge>false</sJudge>
+    <eJudge>true</eJudge>
+    <asStart>2</asStart>
+    <asEnd>1</asEnd>
+    <func>JUDGE</func>
+    <color reference="../nArrow/color"/>
+    <truePos>NONE</truePos>
+    <falsePos>NONE</falsePos>
+    <Judge>0</Judge>
+  </pers.sfc.shapes.MyDiamond>
+  <pers.sfc.shapes.MyRectangle reference="../pers.sfc.shapes.MyDiamond/nArrow/start"/>
+  <pers.sfc.shapes.MyRoundRectangle reference="../pers.sfc.shapes.MyDiamond/nArrow/start/nArrow/start"/>
+  <pers.sfc.shapes.MyRoundRectangle reference="../pers.sfc.shapes.MyDiamond/wArrow/end/sArrow/end/sArrow/end"/>
+  <pers.sfc.shapes.MyParallelogram reference="../pers.sfc.shapes.MyDiamond/wArrow/end/sArrow/end"/>
+  <pers.sfc.shapes.MyRectangle reference="../pers.sfc.shapes.MyDiamond/wArrow/end"/>
+  <pers.sfc.shapes.MyRectangle reference="../pers.sfc.shapes.MyDiamond/wArrow/end/sArrow/end/nArrow/start"/>
+  <pers.sfc.shapes.MyArrow reference="../pers.sfc.shapes.MyDiamond/wArrow/end/sArrow/end/sArrow"/>
+  <pers.sfc.shapes.MyArrow reference="../pers.sfc.shapes.MyDiamond/wArrow/end/sArrow/end/nArrow"/>
+  <pers.sfc.shapes.MyArrow reference="../pers.sfc.shapes.MyDiamond/wArrow/end/sArrow"/>
+  <pers.sfc.shapes.MyArrow reference="../pers.sfc.shapes.MyDiamond/wArrow"/>
+  <pers.sfc.shapes.MyArrow reference="../pers.sfc.shapes.MyDiamond/wArrow/end/sArrow/end/nArrow/start/nArrow"/>
+  <pers.sfc.shapes.MyArrow reference="../pers.sfc.shapes.MyDiamond/nArrow"/>
+  <pers.sfc.shapes.MyArrow reference="../pers.sfc.shapes.MyDiamond/nArrow/start/nArrow"/>
+</list>

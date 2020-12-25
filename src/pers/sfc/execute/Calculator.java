@@ -2,13 +2,8 @@ package pers.sfc.execute;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class Calculator {
@@ -36,7 +31,7 @@ public class Calculator {
         str = MyUtils.change2StandardFormat(str);
         // 拆分字符和数字
         String[] nums = str.split("[^.0-9]");
-        List<Double> numLst = new ArrayList();
+        List<Double> numLst = new ArrayList<Double>();
         for (int i = 0; i < nums.length; i++) {
             if (!"".equals(nums[i])) {
                 numLst.add(Double.parseDouble(nums[i]));
@@ -49,7 +44,6 @@ public class Calculator {
     public Double doCalculate(String symStr, List<Double> numLst) {
         LinkedList<Character> symStack = new LinkedList<>();// 符号栈
         LinkedList<Double> numStack = new LinkedList<>();// 数字栈
-        double result = 0;
         int i = 0;// numLst的标志位
         int j = 0;// symStr的标志位
         char sym;// 符号
@@ -106,7 +100,6 @@ public class Calculator {
     }
     private static class MyUtils {
         public static final int FORMAT_MAX_LENGTH = 500;// 表达式最大长度限制
-        public static final int RESULT_DECIMAL_MAX_LENGTH = 8;// 结果小数点最大长度限制
         public static final Map<Character, Integer> symLvMap = new HashMap<Character, Integer>();// 符号优先级map
         static {
             symLvMap.put('=', 0);
@@ -191,22 +184,6 @@ public class Calculator {
                 return false;
             }
 
-        }
-
-        public static String formatResult(String str) {
-            String[] ss = str.split("\\.");
-            if (Integer.parseInt(ss[1]) == 0) {
-                return ss[0];// 整数
-            }
-            String s1 = new StringBuilder(ss[1]).reverse().toString();
-            int start = 0;
-            for (int i = 0; i < s1.length(); i++) {
-                if (s1.charAt(i) != '0') {
-                    start = i;
-                    break;
-                }
-            }
-            return ss[0] + "." + new StringBuilder(s1.substring(start, s1.length())).reverse();
         }
 
         public static boolean isCorrectChar(Character c) {
